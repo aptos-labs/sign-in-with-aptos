@@ -1,0 +1,34 @@
+{
+  "name": "@aptos-labs/sign-in-with-aptos",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "test": "turbo test",
+    "clean": "turbo clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo build --filter=@aptos-labs/siwa && changeset publish",
+    "vite-example": "turbo dev --filter=@aptos-labs/siwa-vite-example --filter=@aptos-labs/siwa-backend-example --ui tui"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.11",
+    "@vitest/coverage-v8": "^3.0.5",
+    "eslint": "^9.20.1",
+    "prettier": "^3.5.1",
+    "turbo": "^2.4.2",
+    "vitest": "^3.0.5"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "@swc/core",
+      "esbuild"
+    ]
+  }
+}
