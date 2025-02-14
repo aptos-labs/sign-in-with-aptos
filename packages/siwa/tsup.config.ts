@@ -5,7 +5,7 @@ export default defineConfig((options) => ({
   splitting: false,
   sourcemap: true,
   format: ["cjs", "esm"],
-  dts: true,
   clean: !options.watch,
   minify: !options.watch,
+  onSuccess: "tsc --project tsconfig.build.json",
 }));
