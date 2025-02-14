@@ -1,5 +1,11 @@
 # @aptos-labs/siwa
 
+## 0.1.2
+
+### Patch Changes
+
+- 34b160b: Add types declaration maps
+
 ## 0.1.1
 
 ### Patch Changes
