@@ -28,7 +28,7 @@ export interface Indexed<T> {
 export function arraysEqual<T>(
   a: Indexed<T>,
   b: Indexed<T>,
-  excludedValues?: T[]
+  excludedValues?: T[],
 ): boolean {
   if (a === b) return true;
 

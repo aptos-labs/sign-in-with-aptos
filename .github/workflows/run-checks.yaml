@@ -8,8 +8,8 @@ on:
       - main
 
 jobs:
-  run-tests:
-    name: Run Tests
+  run-package-checks:
+    name: Run Checks on @aptos-labs/siwa
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -28,7 +28,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
-      - name: Run Tests
-        run: pnpm test
+      - name: Run Checks
+        run: pnpm check --filter=@aptos-labs/siwa
         shell: bash
 

@@ -6,14 +6,13 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "sideEffects": false,
-  "files": [
-    "dist",
-    "src",
-    "README.md",
-    "CHANGELOG.md"
-  ],
+  "files": ["dist", "src", "README.md", "CHANGELOG.md"],
   "scripts": {
     "build": "tsup",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
     "test": "vitest run --coverage",
     "test:watch": "vitest"
   },

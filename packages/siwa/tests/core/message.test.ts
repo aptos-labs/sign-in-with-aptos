@@ -3,8 +3,8 @@ import {
   createSignInMessageText,
   parseSignInMessageText,
 } from "../../src/core.js";
-import { AptosSignInInput } from "@aptos-labs/wallet-standard";
-import { AptosSignInRequiredFields } from "@aptos-labs/wallet-standard";
+import type { AptosSignInInput } from "@aptos-labs/wallet-standard";
+import type { AptosSignInRequiredFields } from "@aptos-labs/wallet-standard";
 
 const defaultFieldsInput = {
   domain: "example.com",
@@ -134,6 +134,7 @@ describe("parseSignInMessageText", () => {
     const message = createSignInMessageText({
       ...defaultFieldsInput,
       domain: undefined,
+      // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
     const result = parseSignInMessageText(message);
     expect(result.valid).toBe(false);
@@ -145,6 +146,7 @@ describe("parseSignInMessageText", () => {
     const message = createSignInMessageText({
       ...defaultFieldsInput,
       address: undefined,
+      // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
     const result = parseSignInMessageText(message);
     expect(result.valid).toBe(false);
@@ -156,6 +158,7 @@ describe("parseSignInMessageText", () => {
     const message = createSignInMessageText({
       ...defaultFieldsInput,
       version: undefined,
+      // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
     const result = parseSignInMessageText(message);
     expect(result.valid).toBe(false);
@@ -167,6 +170,7 @@ describe("parseSignInMessageText", () => {
     const message = createSignInMessageText({
       ...defaultFieldsInput,
       chainId: undefined,
+      // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
     const result = parseSignInMessageText(message);
     expect(result.valid).toBe(false);

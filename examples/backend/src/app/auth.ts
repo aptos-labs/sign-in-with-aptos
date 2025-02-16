@@ -1,4 +1,4 @@
-import { type AptosSignInInput } from "@aptos-labs/wallet-standard";
+import type { AptosSignInInput } from "@aptos-labs/wallet-standard";
 import { zValidator } from "@hono/zod-validator";
 import {
   generateNonce,

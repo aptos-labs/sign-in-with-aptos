@@ -5,13 +5,13 @@ import {
   MultiEd25519PublicKey,
   AnyPublicKey,
   MultiKey,
-  HexInput,
+  type HexInput,
   Hex,
   Deserializer,
   Ed25519Signature,
   MultiEd25519Signature,
   AnySignature,
-  Signature,
+  type Signature,
   MultiKeySignature,
 } from "@aptos-labs/ts-sdk";
 import { encodeBase64 } from "./internal.js";
@@ -24,19 +24,23 @@ import { encodeBase64 } from "./internal.js";
  * @returns The signing scheme of the public key.
  */
 export function getSignInPublicKeyScheme(
-  value: SigningScheme | PublicKey
+  value: SigningScheme | PublicKey,
 ): string {
   // If the value is a PublicKey
   if (value instanceof PublicKey) {
     if (value instanceof Ed25519PublicKey) {
       return "ed25519";
-    } else if (value instanceof MultiEd25519PublicKey) {
+    }
+    if (value instanceof MultiEd25519PublicKey) {
       return "multi_ed25519";
-    } else if (value instanceof AnyPublicKey) {
+    }
+    if (value instanceof AnyPublicKey) {
       return "single_key";
-    } else if (value instanceof MultiKey) {
+    }
+    if (value instanceof MultiKey) {
       return "multi_key";
     }
+    throw new Error(`Unknown public key instance: ${value}`);
   }
 
   // If the value is a SigningScheme
@@ -69,7 +73,7 @@ export function deserializeSignInPublicKey(
     | "multi_ed25519"
     | "single_key"
     | "multi_key",
-  value: HexInput
+  value: HexInput,
 ): PublicKey {
   const deserializer = new Deserializer(Hex.fromHexInput(value).toUint8Array());
 
@@ -85,7 +89,7 @@ export function deserializeSignInPublicKey(
         return MultiKey.deserialize(deserializer);
       default:
         throw new Error(
-          `Unknown public key type for signing scheme: ${scheme}`
+          `Unknown public key type for signing scheme: ${scheme}`,
         );
     }
   }
@@ -112,7 +116,7 @@ export function deserializeSignInSignature(
     | "multi_ed25519"
     | "single_key"
     | "multi_key",
-  value: HexInput
+  value: HexInput,
 ): Signature {
   const deserializer = new Deserializer(Hex.fromHexInput(value).toUint8Array());
 

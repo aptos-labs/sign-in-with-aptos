@@ -1,12 +1,12 @@
-import { PublicKey, Signature } from "@aptos-labs/ts-sdk";
+import type { PublicKey, Signature } from "@aptos-labs/ts-sdk";
 import { arraysEqual } from "./internal.js";
-import {
+import type {
   VerificationComparisonError,
   VerificationMessageError,
   VerificationResult,
 } from "./types.js";
 import { sha3_256 } from "@noble/hashes/sha3";
-import {
+import type {
   AptosSignInInput,
   AptosSignInRequiredFields,
 } from "@aptos-labs/wallet-standard";
@@ -20,7 +20,7 @@ import {
  * @returns The SignIn message text.
  */
 export function createSignInMessageText(
-  input: AptosSignInInput & AptosSignInRequiredFields
+  input: AptosSignInInput & AptosSignInRequiredFields,
 ): string {
   let message = `${input.domain} wants you to sign in with your Aptos account:\n`;
   message += `${input.address}`;
@@ -55,7 +55,7 @@ export function createSignInMessageText(
     fields.push(`Chain ID: ${input.chainId}`);
   }
   if (input.resources) {
-    fields.push(`Resources:`);
+    fields.push("Resources:");
     for (const resource of input.resources) {
       fields.push(`- ${resource}`);
     }
@@ -85,7 +85,7 @@ const FIELDS = `${URI}${VERSION}${NONCE}${ISSUED_AT}${EXPIRATION_TIME}${NOT_BEFO
 const MESSAGE = new RegExp(`^${DOMAIN}${ADDRESS}${STATEMENT}${FIELDS}\\n*$`);
 
 export function parseSignInMessageText(
-  text: string
+  text: string,
 ): VerificationResult<AptosSignInInput & AptosSignInRequiredFields> {
   const match = MESSAGE.exec(text);
   if (!match) return { valid: false, errors: ["invalid_message"] };
@@ -136,7 +136,7 @@ export function parseSignInMessageText(
 export function verifySignInMessage(
   input: AptosSignInInput,
   expected: string,
-  options?: { excludedResources?: string[] }
+  options?: { excludedResources?: string[] },
 ): VerificationResult<AptosSignInInput & AptosSignInRequiredFields> {
   const parsedFields = parseSignInMessageText(expected);
   if (!parsedFields.valid) return parsedFields;
@@ -166,7 +166,9 @@ export function verifySignInMessage(
 
   // If the domain is unexpectedly provided, it must be verified.
   if (
+    // biome-ignore lint/suspicious/noExplicitAny: May be present in the input.
     (input as any).domain &&
+    // biome-ignore lint/suspicious/noExplicitAny: May be present in the input.
     (input as any).domain !== parsedFields.data.domain
   )
     errors.push("message_domain_mismatch");
@@ -178,7 +180,7 @@ export function verifySignInMessage(
       !arraysEqual(
         input.resources,
         parsedFields.data.resources,
-        options?.excludedResources
+        options?.excludedResources,
       )
     ) {
       errors.push("message_resources_mismatch");
@@ -204,7 +206,7 @@ export function verifySignInMessage(
  */
 export function verifySignIn(
   input: AptosSignInInput & { domain: string },
-  output: { publicKey: PublicKey; signature: Signature; message: string }
+  output: { publicKey: PublicKey; signature: Signature; message: string },
 ): VerificationResult<AptosSignInInput & AptosSignInRequiredFields> {
   const messageVerification = verifySignInMessage(input, output.message);
   if (!messageVerification.valid) return messageVerification;

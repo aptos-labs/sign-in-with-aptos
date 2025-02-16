@@ -5,6 +5,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "test": "turbo test",
+    "lint": "turbo lint",
+    "check": "turbo test format lint",
     "clean": "turbo clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
@@ -13,10 +15,9 @@
     "vite-example": "turbo dev --filter=@aptos-labs/siwa-vite-example --filter=@aptos-labs/siwa-backend-example --ui tui"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@changesets/cli": "^2.27.11",
     "@vitest/coverage-v8": "^3.0.5",
-    "eslint": "^9.20.1",
-    "prettier": "^3.5.1",
     "turbo": "^2.4.2",
     "vitest": "^3.0.5"
   },

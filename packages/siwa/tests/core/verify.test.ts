@@ -7,7 +7,7 @@ import {
 } from "../../src/core.js";
 import { Ed25519Signature } from "@aptos-labs/ts-sdk";
 import { ed25519Account } from "../lib/constants.js";
-import {
+import type {
   AptosSignInInput,
   AptosSignInRequiredFields,
 } from "@aptos-labs/wallet-standard";
