@@ -170,7 +170,6 @@ export default async function Code() {
     code: highlighter.codeToHtml(e.code, {
       lang: "typescript",
       themes: { light: "github-light", dark: "github-dark" },
-      theme: "dark",
     }),
   }));
 
