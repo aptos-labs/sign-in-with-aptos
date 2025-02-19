@@ -2,7 +2,6 @@
 
 import ExpandingContainer from "@/components/ExpandingContainer";
 import { AnimatePresence, motion } from "motion/react";
-import { useTheme } from "nextra-theme-docs";
 import { useState } from "react";
 import type { CodeOption } from "./Code";
 
@@ -11,8 +10,6 @@ interface CodeExamplesProps {
 }
 
 export default function CodeExamples({ options }: CodeExamplesProps) {
-  const theme = useTheme();
-
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   return (

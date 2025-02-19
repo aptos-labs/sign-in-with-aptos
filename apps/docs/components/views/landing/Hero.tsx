@@ -41,9 +41,15 @@ export default function Hero() {
         <br />
 
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.75, duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+          transition={{
+            delay: 0.4,
+            duration: 0.4,
+            type: "spring",
+            stiffness: 190,
+            damping: 22,
+          }}
         >
           <Button asChild>
             <Link href="/docs">Get Started</Link>

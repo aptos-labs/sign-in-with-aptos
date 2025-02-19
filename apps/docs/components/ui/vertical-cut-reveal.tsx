@@ -1,5 +1,6 @@
 "use client";
 
+import { type Transition, motion } from "motion/react";
 import {
   forwardRef,
   useCallback,
@@ -9,7 +10,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { type Transition, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 

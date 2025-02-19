@@ -124,7 +124,7 @@ export default function ConnectButton() {
   {
     title: "4. Implement Auto Connect Behavior",
     description:
-      "Design a specialized AI agent with custom decision-making logic.",
+      "Add support for SIWA in the auto connect behavior of the wallet adapter.",
     code: `import {
   AptosWalletAdapterProvider,
   type Wallet,
