@@ -1,0 +1,57 @@
+---
+title: "Introduction"
+---
+
+# Introduction
+
+The "Sign in with Aptos" (SIWA) standard introduces a secure and user-friendly way for users to authenticate to off-chain resources by proving ownership of their Aptos account. It simplifies the authentication process by replacing the traditional connect + signMessage flow in the wallet standard with a streamlined one-click signIn method. SIWA leverages Aptos accounts to avoid reliance on traditional schemes like SSO while incorporating security measures to combat phishing attacks and improve user visibility.
+
+<br/>
+
+## Motivation
+
+### Why is this important?
+
+Authenticating with Aptos accounts is a privacy-first solution that empowers individuals to safeguard their information, personalize their experiences, and maintain freedom from censorship.
+
+By authenticating using Aptos accounts, users have full control over their authentication journey. They can decide _what to share_ and _how to log in,_ ensuring a more secure and customizable experience.
+
+For example, a user may choose to use one of the wallet experiences to authenticate into an application:
+
+- **Petra** – _Passwords/Biometric_: - Fully non-custodial. Requires no information to be shared with Petra, ensuring complete privacy and resistance to censorship.
+- **Aptos Connect** – _Social Providers_: Fully non-custodial. Shares limited information with Aptos Connect including name, email, `sub` and may be subject to censorship by social providers.
+
+However, while this approach offers significant benefits, the existing `connect` + `signMessage` flow used for authentication presents a few challenges:
+
+The `signMessage` step has...
+
+<br/>
+<div className="rounded-md overflow-hidden">
+  <img src="/assets/drawing-3.png" alt="Sign in with Aptos" />
+</div>
+
+- **a lack of standardization —** Applications on Aptos lack a unified authentication message format, leading to inconsistencies that confuse users.
+- **unreadable messages —** Authentication messages are displayed in plain text, making them difficult for users to comprehend.
+
+And the `connect` + `signMessage` flow...
+
+<br/>
+<div className="rounded-md overflow-hidden">
+  <img src="/assets/drawing-2.png" alt="Connect and Sign Message Flow" />
+</div>
+
+- **presents security risks —** Malicious websites can deceive users into signing messages intended for legitimate dApps.
+- **is unintuitive —** The traditional `connect` + `signMessage` workflow involves two separate steps, creating a clunky and unintuitive user experience.
+
+Addressing these challenges is key to unlocking the full potential of Aptos accounts and delivering a seamless, secure, and user-friendly experience.
+
+### What is the proposed solution?
+
+The proposed model builds on established standards, including [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361), [CAIP-122](https://chainagnostic.org/CAIPs/caip-122), and [Sign in with Solana](https://phantom.app/learn/developers/sign-in-with-solana). Drawing inspiration from [Sign in with Solana](https://phantom.app/learn/developers/sign-in-with-solana), this standard aims to shift the responsibility of message construction from dApps to wallets, streamlining the authentication process.
+
+With a **Sign in with Aptos (SIWA)** flow, we address key challenges by enabling wallets to interpret standardized message formats, allowing them to flag potentially illegitimate messages. This approach not only improves security but also builds user trust. Additionally, the wallet standard incorporates critical features such as domain binding, message timestamps, resources, and request IDs, ensuring a more robust authentication experience.
+
+<br/>
+<div className="rounded-md overflow-hidden">
+  <img src="/assets/drawing-1.png" alt="Sign in with Aptos Authentication UI" />
+</div>

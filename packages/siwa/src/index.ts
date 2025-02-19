@@ -7,3 +7,4 @@ export {
   VerificationSignatureError,
 } from "./types.js";
 export * from "./utils.js";
+export * from "./serializers.js";

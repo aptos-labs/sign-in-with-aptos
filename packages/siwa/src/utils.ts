@@ -17,6 +17,24 @@ import {
 import { encodeBase64 } from "./internal.js";
 
 /**
+ * Check if the scheme is a valid public key scheme
+ *
+ * @param scheme The scheme to check.
+ *
+ * @returns True if the scheme is a valid public key scheme, false otherwise.
+ */
+export const isValidPublicKeyScheme = (
+  scheme: string,
+): scheme is "ed25519" | "multi_ed25519" | "single_key" | "multi_key" => {
+  return (
+    scheme === "ed25519" ||
+    scheme === "multi_ed25519" ||
+    scheme === "single_key" ||
+    scheme === "multi_key"
+  );
+};
+
+/**
  * Get the signing scheme of a public key.
  *
  * @param value The public key or signing scheme to get the scheme of.
