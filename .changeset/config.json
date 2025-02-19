@@ -8,6 +8,7 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@aptos-labs/siwa-vite-example",
-    "@aptos-labs/siwa-backend-example"
+    "@aptos-labs/siwa-backend-example",
+    "@aptos-labs/siwa-docs"
   ]
 }

@@ -1,0 +1,91 @@
+---
+title: "@aptos-labs/siwa"
+---
+
+import { Steps } from 'nextra/components'
+
+# @aptos-labs/siwa
+
+`@aptos-labs/siwa` is a TypeScript library that provides a set of utilities for working with SIWA.
+
+
+## Getting Started
+
+<Steps>
+
+### Install
+
+To use `@aptos-labs/siwa` in your project, you can install it using your preferred package manager. The package is available via npm.
+
+```sh npm2yarn
+npm i -D @aptos-labs/siwa
+```
+
+### Constructing a SIWA Message
+
+To construct a SIWA message, you can use the `createSignInMessageText` function. This object will
+take in an `AptosSignInInput` with `AptosSignInRequiredFields` from the `@aptos-labs/wallet-standard` package and return a plain text string.
+
+```ts
+import { createSignInMessageText, generateNonce } from '@aptos-labs/siwa'
+import type { AptosSignInInput, AptosSignInRequiredFields } from '@aptos-labs/wallet-standard'
+
+// Output:
+// example.com wants you to sign in with your Aptos account:
+// 0x10d7cf502f8571b5b6e402221cafb142547103da9c2847ffcf708f065a78b8d1
+//
+// URI: https://example.com
+// Version: 1
+// Nonce: abc123
+// Chain ID: aptos:mainnet
+const plainText = createSignInMessageText({ 
+    address: '0x10d7cf502f8571b5b6e402221cafb142547103da9c2847ffcf708f065a78b8d1',
+    chainId: 'aptos:mainnet',
+    domain: 'example.com',
+    nonce: generateNonce(),
+    uri: 'https://example.com',
+    version: '1',
+} satisfies AptosSignInInput & AptosSignInRequiredFields)
+```
+
+### Verifying a SIWA Message
+
+You can also verify a SIWA Message with `AptosSignInInput` using the `verifySignInMessage` function.
+
+```ts
+import { verifySignInMessage } from '@aptos-labs/siwa'
+import type { AptosSignInInput, AptosSignInRequiredFields } from '@aptos-labs/wallet-standard'
+
+const input = {
+    domain: "example.com",
+    uri: "https://example.com",
+    address: "0x123",
+    version: "1",
+    chainId: "aptos:mainnet",
+    nonce: "abc123"
+} satisfies AptosSignInInput & AptosSignInRequiredFields
+
+const plainText = `example.com wants you to sign in with your Aptos account:
+0x10d7cf502f8571b5b6e402221cafb142547103da9c2847ffcf708f065a78b8d1
+
+URI: https://example.com
+Version: 1
+Nonce: abc123
+Chain ID: aptos:mainnet`
+
+// Output:
+// {
+//   valid: true,
+//   data: {
+//     address: '0x123',
+//     chainId: 'aptos:mainnet',
+//     domain: 'example.com',
+//     nonce: 'abc123',
+//     version: '1',
+//     uri: 'https://example.com',
+//   },
+// }
+const result = verifySignInMessage(input, plainText)
+```
+
+</Steps>

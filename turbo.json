@@ -11,7 +11,13 @@
       "dependsOn": []
     },
     "lint": {},
+    "lint:fix": {
+      "cache": false
+    },
     "format": {},
+    "format:fix": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true

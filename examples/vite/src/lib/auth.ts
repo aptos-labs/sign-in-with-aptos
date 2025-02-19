@@ -1,8 +1,9 @@
 import { BACKEND_URL } from "@/lib/utils";
-import {
+import type {
   AptosSignInInput,
   AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-react";
+import { serializeSignInOutput } from "@aptos-labs/siwa";
 
 export const fetchSignInInput = async () => {
   const response = await fetch(`${BACKEND_URL}/auth/siwa`, {
@@ -25,12 +26,7 @@ export const loginWithSignInOutput = async (output: AptosSignInOutput) => {
     credentials: "include",
     method: "POST",
     headers: new Headers({ "Content-Type": "application/json" }),
-    body: JSON.stringify({
-      type: output.type,
-      signature: output.signature.bcsToHex().toString(),
-      message: output.plainText,
-      publicKey: output.account.publicKey.bcsToHex().toString(),
-    }),
+    body: JSON.stringify({ output: serializeSignInOutput(output) }),
   });
   if (!response.ok) throw new Error("Failed to login with sign in output");
   return (await response.json()) as { data: boolean };
