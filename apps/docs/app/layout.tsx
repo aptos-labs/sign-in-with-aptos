@@ -92,7 +92,7 @@ export default async function RootLayout({
                 logo={
                   <div className="gap-2 flex items-center">
                     <img
-                      src="./icon.svg"
+                      src="./navicon.svg"
                       alt="Aptos Logo"
                       style={{
                         borderRadius: "4px",
