@@ -69,7 +69,7 @@ auth.post(
     const verification = verifySignIn(
       {
         ...(JSON.parse(input) as AptosSignInInput),
-        domain: new URL(c.req.url).host,
+        domain: 'localhost:5173',
       },
       deserializedOutput
     );

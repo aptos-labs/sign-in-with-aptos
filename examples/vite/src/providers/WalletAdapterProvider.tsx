@@ -1,35 +1,43 @@
-import {
-  AptosWalletAdapterProvider,
-  Wallet,
-  WalletCore,
-} from "@aptos-labs/wallet-adapter-react";
-import { PropsWithChildren, useCallback } from "react";
-import { fetchSignInInput, loginWithSignInOutput } from "@/lib/auth";
-import { useQueryClient } from "@tanstack/react-query";
 import { fetchUser } from "@/hooks/useUser";
+import { fetchSignInInput, loginWithSignInOutput } from "@/lib/auth";
+import {
+  type AdapterWallet,
+  AptosWalletAdapterProvider,
+  type WalletCore,
+} from "@aptos-labs/wallet-adapter-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { type PropsWithChildren, useCallback } from "react";
 import { toast } from "sonner";
 
 export default function WalletAdapterProvider({ children }: PropsWithChildren) {
   const queryClient = useQueryClient();
 
-  const autoConnect = useCallback(async (core: WalletCore, wallet: Wallet) => {
-    // If the user is already logged in, the user does not need to sign a message.
-    // They can proceed with a normal connect flow.
-    if (!wallet.signIn || (await fetchUser()) !== null) return true;
+  const autoConnect = useCallback(
+    async (core: WalletCore, adapter: AdapterWallet) => {
+      // If the user is already logged in, the user does not need to sign a message.
+      // They can proceed with a normal connect flow.
+      if (!adapter.features["aptos:signIn"] || (await fetchUser()) !== null) {
+        return true;
+      }
 
-    const input = await fetchSignInInput();
+      const input = await fetchSignInInput();
 
-    const output = await core.signIn(wallet.name, input.data);
+      const output = await core.signIn({
+        walletName: adapter.name,
+        input: input.data,
+      });
 
-    if (typeof output !== "object")
-      throw new Error("An issue occurred while signing in.");
+      if (typeof output !== "object")
+        throw new Error("An issue occurred while signing in.");
 
-    await loginWithSignInOutput(output);
+      await loginWithSignInOutput(output);
 
-    await queryClient.invalidateQueries({ queryKey: ["user"] });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
 
-    return false;
-  }, []);
+      return false;
+    },
+    [queryClient],
+  );
 
   return (
     <AptosWalletAdapterProvider

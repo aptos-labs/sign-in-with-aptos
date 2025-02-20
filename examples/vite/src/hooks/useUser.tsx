@@ -26,24 +26,31 @@ export function useUser() {
 
   const query = useQuery({
     queryKey: ["user"],
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
     queryFn: fetchUser,
   });
 
   const isLoggedIn = useMemo(
-    () => account && query.data && query.data.id === account.address,
-    [account, query.data]
+    () => account && query.data && query.data.id === account.address.toString(),
+    [account, query.data],
   );
 
   const user = useMemo(
-    () => (isLoggedIn ? { ...account!, ...query.data! } : undefined),
-    [account, query.data]
+    () =>
+      isLoggedIn && account && query.data
+        ? { ...account, ...query.data }
+        : undefined,
+    [account, query.data, isLoggedIn],
   );
 
   useQuery({
     queryKey: ["ensure-account", account?.address, query?.data?.id],
     queryFn: async () => {
-      if (query.data && account && query.data?.id !== account?.address) {
+      if (
+        query.data &&
+        account &&
+        query.data?.id !== account?.address.toString()
+      ) {
         logout();
       }
       return null;

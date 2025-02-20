@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow crawling of certain paths
+Disallow: /api/
+Disallow: /_next/ 

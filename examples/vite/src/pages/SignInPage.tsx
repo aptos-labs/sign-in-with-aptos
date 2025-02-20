@@ -39,7 +39,9 @@ export default function SignInPage() {
     <Card className="w-full max-w-md mx-auto">
       <div className="px-6 py-4">
         <h1 className="text-lg">Hello 👋</h1>
-        <h1 className="font-mono">{truncateAddress(user?.address ?? "")}</h1>
+        <h1 className="font-mono">
+          {truncateAddress(user?.address?.toString() ?? "")}
+        </h1>
       </div>
       <Separator className="mb-4" />
       <CardContent>

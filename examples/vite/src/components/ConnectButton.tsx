@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import useLogout from "@/hooks/useLogout";
 import { useUser } from "@/hooks/useUser";
 import {
@@ -29,7 +29,7 @@ export default function ConnectButton({
         ? fetchSignInInput()
         : fetchSignInErrorInput());
 
-      const output = await signIn("Petra" as any, input.data);
+      const output = await signIn({ walletName: "Petra", input: input.data });
 
       if (typeof output !== "object")
         throw new Error("An issue occurred while signing in.");

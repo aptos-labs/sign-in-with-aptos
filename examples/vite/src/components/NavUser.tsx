@@ -19,13 +19,14 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import useLogout from "@/hooks/useLogout";
+import type { AccountAddress } from "@aptos-labs/ts-sdk";
 import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
 
 export function NavUser({
   user,
 }: {
   user: {
-    address: string;
+    address: AccountAddress;
     name?: string | null | undefined;
   };
 }) {
@@ -49,7 +50,7 @@ export function NavUser({
                   {user.name ?? "Unknown"}
                 </span>
                 <span className="truncate text-xs">
-                  {truncateAddress(user.address)}
+                  {truncateAddress(user.address.toString())}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -72,7 +73,7 @@ export function NavUser({
                   </span>
                   <span className="truncate text-xs">
                     {" "}
-                    {truncateAddress(user.address)}
+                    {truncateAddress(user.address.toString())}
                   </span>
                 </div>
               </div>

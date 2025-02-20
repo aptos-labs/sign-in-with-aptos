@@ -19,8 +19,45 @@ import "nextra-theme-docs/style.css";
 import AppProviders from "@/context/AppProviders";
 
 export const metadata: Metadata = {
-  title: "Home | Sign in with Aptos",
-  description: "Authenticate using your Aptos account",
+  metadataBase: new URL("https://siwa.aptos.dev"),
+  title: {
+    default: "Sign in with Aptos (SIWA)",
+    template: "%s | Sign in with Aptos",
+  },
+  description:
+    "Authenticate users securely using their Aptos account. A standardized authentication protocol for Aptos accounts.",
+  keywords: [
+    "aptos",
+    "authentication",
+    "blockchain",
+    "web3",
+    "siwa",
+    "crypto",
+    "wallet",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://siwa.aptos.dev",
+    siteName: "Sign in with Aptos",
+    title: "Sign in with Aptos (SIWA)",
+    description:
+      "Authenticate users securely using their Aptos account. A standardized authentication protocol for Web3 applications.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sign in with Aptos (SIWA)",
+    description:
+      "Authenticate users securely using their Aptos account. A standardized authentication protocol for Web3 applications.",
+    creator: "@AptosLabs",
+  },
+  appleWebApp: { title: "SIWA" },
+  manifest: "/site.webmanifest",
 };
 
 export const viewport: Viewport = {
@@ -55,7 +92,7 @@ export default async function RootLayout({
                 logo={
                   <div className="gap-2 flex items-center">
                     <img
-                      src="/icon.svg"
+                      src="./icon.svg"
                       alt="Aptos Logo"
                       style={{
                         borderRadius: "4px",

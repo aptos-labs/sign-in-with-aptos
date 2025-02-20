@@ -1,5 +1,5 @@
-import * as React from "react";
 import { SquareTerminal } from "lucide-react";
+import type * as React from "react";
 
 import { NavUser } from "@/components/NavUser";
 import {
@@ -17,9 +17,9 @@ import {
 } from "@/components/ui/sidebar";
 
 import AptosLabsLogo from "@/assets/aptoslabs_logo.jpeg";
-import { NavLink, useLocation } from "react-router";
-import { useUser } from "@/hooks/useUser";
 import useLogout from "@/hooks/useLogout";
+import { useUser } from "@/hooks/useUser";
+import { NavLink, useLocation } from "react-router";
 
 const data = {
   navMain: [
@@ -45,7 +45,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, isLoggedIn } = useUser();
   const { mutate: logout } = useLogout();
-  let location = useLocation();
+  const location = useLocation();
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -53,7 +53,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <a href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <img
                     src={AptosLabsLogo}

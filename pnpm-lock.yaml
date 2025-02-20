@@ -142,6 +142,9 @@ importers:
       '@aptos-labs/siwa':
         specifier: workspace:*
         version: link:../../packages/siwa
+      '@aptos-labs/ts-sdk':
+        specifier: ^1.33.2
+        version: 1.35.0(axios@1.7.9)(got@11.8.6)
       '@aptos-labs/wallet-adapter-react':
         specifier: ^3.7.11
         version: 3.8.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@mizuwallet-sdk/core@1.4.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@mizuwallet-sdk/protocol@0.0.6)(graphql-request@7.1.2(graphql@16.10.0)))(@mizuwallet-sdk/protocol@0.0.6)(@telegram-apps/bridge@1.9.2)(@types/react@19.0.10)(@wallet-standard/core@1.0.3)(aptos@1.21.0)(axios@1.7.9)(got@11.8.6)(react@19.0.0)
@@ -272,11 +275,11 @@ packages:
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
 
-  '@aptos-connect/wallet-adapter-plugin@2.3.4':
-    resolution: {integrity: sha512-YTV7pSpzv5tx97G5suMnDplMMQYDM0VfpP1hQjEn8jLkw6I+hNDxRfINL1/k3mp+jm0TmghmNUiFYHFuVSS6wg==}
+  '@aptos-connect/wallet-adapter-plugin@2.3.2':
+    resolution: {integrity: sha512-LW/jV1Apomglr5Swvd5IULkaoPw9+9oN7wnczQx6mIc8Qmiuv8ekc1df/OvIxn7kFKo62Dy+wUjcBKobUR8wOQ==}
     peerDependencies:
-      '@aptos-labs/ts-sdk': ^1.33.1
-      '@aptos-labs/wallet-standard': ^0.2.0
+      '@aptos-labs/ts-sdk': 1.26.0
+      '@aptos-labs/wallet-standard': 0.2.0
 
   '@aptos-connect/wallet-api@0.1.8':
     resolution: {integrity: sha512-JFL5kZE1Az/1gVmYk8YsNje0mhr1FLeP7Ye8Osc5/IA9Fv/GrXzfvvSyj2CFwPiE8EhlPftQuohC7PqRz6unjg==}
@@ -4960,7 +4963,7 @@ snapshots:
 
   '@antfu/utils@8.1.1': {}
 
-  '@aptos-connect/wallet-adapter-plugin@2.3.4(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@aptos-labs/wallet-standard@0.2.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@wallet-standard/core@1.0.3))(@telegram-apps/bridge@1.9.2)(aptos@1.21.0)':
+  '@aptos-connect/wallet-adapter-plugin@2.3.2(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@aptos-labs/wallet-standard@0.2.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@wallet-standard/core@1.0.3))(@telegram-apps/bridge@1.9.2)(aptos@1.21.0)':
     dependencies:
       '@aptos-connect/wallet-api': 0.1.8(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(aptos@1.21.0)
       '@aptos-labs/ts-sdk': 1.35.0(axios@1.7.9)(got@11.8.6)
@@ -5029,7 +5032,7 @@ snapshots:
 
   '@aptos-labs/wallet-adapter-core@4.25.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@mizuwallet-sdk/core@1.4.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@mizuwallet-sdk/protocol@0.0.6)(graphql-request@7.1.2(graphql@16.10.0)))(@mizuwallet-sdk/protocol@0.0.6)(@telegram-apps/bridge@1.9.2)(@wallet-standard/core@1.0.3)(aptos@1.21.0)(axios@1.7.9)(got@11.8.6)':
     dependencies:
-      '@aptos-connect/wallet-adapter-plugin': 2.3.4(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@aptos-labs/wallet-standard@0.2.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@wallet-standard/core@1.0.3))(@telegram-apps/bridge@1.9.2)(aptos@1.21.0)
+      '@aptos-connect/wallet-adapter-plugin': 2.3.2(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@aptos-labs/wallet-standard@0.2.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@wallet-standard/core@1.0.3))(@telegram-apps/bridge@1.9.2)(aptos@1.21.0)
       '@aptos-labs/ts-sdk': 1.35.0(axios@1.7.9)(got@11.8.6)
       '@aptos-labs/wallet-standard': 0.2.0(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(@wallet-standard/core@1.0.3)
       '@atomrigslab/aptos-wallet-adapter': 0.1.21(@aptos-labs/ts-sdk@1.35.0(axios@1.7.9)(got@11.8.6))(axios@1.7.9)(got@11.8.6)
@@ -6640,7 +6643,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 22.13.4
+      '@types/node': 20.17.19
       '@types/responselike': 1.0.3
 
   '@types/chrome@0.0.136':
@@ -6797,7 +6800,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 22.13.4
+      '@types/node': 20.17.19
 
   '@types/mdast@4.0.4':
     dependencies:
@@ -6831,7 +6834,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 22.13.4
+      '@types/node': 20.17.19
 
   '@types/trusted-types@2.0.7':
     optional: true
@@ -6989,7 +6992,7 @@ snapshots:
   axios@1.7.4:
     dependencies:
       follow-redirects: 1.15.9
-      form-data: 4.0.0
+      form-data: 4.0.2
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug

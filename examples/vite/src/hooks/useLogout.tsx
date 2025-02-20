@@ -1,13 +1,13 @@
 import { BACKEND_URL } from "@/lib/utils";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
-  MutationOptions,
+  type MutationOptions,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 
 export default function useLogout({ ...options }: MutationOptions = {}) {
-  const { disconnect } = useWallet();
+  const { connected, disconnect } = useWallet();
   const queryClient = useQueryClient();
   return useMutation({
     ...options,
@@ -18,7 +18,7 @@ export default function useLogout({ ...options }: MutationOptions = {}) {
         method: "POST",
       });
       await queryClient.invalidateQueries({ queryKey: ["user"] });
-      disconnect();
+      if (connected) disconnect();
     },
   });
 }
