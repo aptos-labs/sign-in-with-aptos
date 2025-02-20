@@ -1,15 +1,15 @@
 import type { PublicKey, Signature } from "@aptos-labs/ts-sdk";
+import type {
+  AptosSignInInput,
+  AptosSignInRequiredFields,
+} from "@aptos-labs/wallet-standard";
+import { sha3_256 } from "@noble/hashes/sha3";
 import { arraysEqual } from "./internal.js";
 import type {
   VerificationComparisonError,
   VerificationMessageError,
   VerificationResult,
 } from "./types.js";
-import { sha3_256 } from "@noble/hashes/sha3";
-import type {
-  AptosSignInInput,
-  AptosSignInRequiredFields,
-} from "@aptos-labs/wallet-standard";
 
 /**
  * Create a SignIn message text from the input following the ABNF format defined in the Sign in with Aptos
@@ -207,8 +207,13 @@ export function verifySignInMessage(
 export function verifySignIn(
   input: AptosSignInInput & { domain: string },
   output: { publicKey: PublicKey; signature: Signature; message: string },
+  options?: { excludedResources?: string[] },
 ): VerificationResult<AptosSignInInput & AptosSignInRequiredFields> {
-  const messageVerification = verifySignInMessage(input, output.message);
+  const messageVerification = verifySignInMessage(
+    input,
+    output.message,
+    options,
+  );
   if (!messageVerification.valid) return messageVerification;
 
   const isSignatureValid = output.publicKey.verifySignature({

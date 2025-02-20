@@ -1,15 +1,13 @@
+import {
+  deserializeSignInOutput,
+  generateNonce,
+  verifySignIn,
+} from "@aptos-labs/siwa";
 import type { AptosSignInInput } from "@aptos-labs/wallet-standard";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
 import { z } from "zod";
-import {
-  generateNonce,
-  deserializeSignInPublicKey,
-  deserializeSignInSignature,
-  verifySignIn,
-  deserializeSignInOutput,
-} from "@aptos-labs/siwa";
 import { createSession, generateSessionToken } from "../lib/sessions.js";
 import { createUserByAddress, getUserByAddress } from "../lib/users.js";
 
@@ -56,7 +54,7 @@ auth.post(
         message: z.string(),
         publicKey: z.string(),
       }),
-    })
+    }),
   ),
   async (c) => {
     const { output } = c.req.valid("json");
@@ -69,9 +67,9 @@ auth.post(
     const verification = verifySignIn(
       {
         ...(JSON.parse(input) as AptosSignInInput),
-        domain: 'localhost:5173',
+        domain: "localhost:5173",
       },
-      deserializedOutput
+      deserializedOutput,
     );
 
     if (!verification.valid) {
@@ -90,7 +88,7 @@ auth.post(
     });
 
     return c.json({ data: true });
-  }
+  },
 );
 
 export default auth;

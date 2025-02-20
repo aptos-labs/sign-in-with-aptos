@@ -11,7 +11,7 @@ export default function Hero() {
     <section>
       <div className="flex flex-col items-center w-full py-24 border-x border-border overflow-hidden">
         <h1>
-          <AuroraText className="pr-1 font-semibold tracking-tighter text-5xl md:text-6xl">
+          <AuroraText className="font-semibold tracking-tighter text-5xl md:text-6xl">
             <VerticalCutReveal
               splitBy="words"
               staggerDuration={0.1}
@@ -22,9 +22,10 @@ export default function Hero() {
                 stiffness: 250,
                 damping: 30,
               }}
+              wordLevelClassName="last:pr-2"
               containerClassName="leading-normal"
             >
-              Sign in with Aptos
+              {"Sign in with Aptos"}
             </VerticalCutReveal>
           </AuroraText>
         </h1>
