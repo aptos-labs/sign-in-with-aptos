@@ -1,6 +1,6 @@
 {
   "name": "@aptos-labs/siwa",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Library of utilities for Sign in with Aptos",
   "repository": {
     "type": "git",
@@ -24,7 +24,13 @@
     }
   },
   "sideEffects": false,
-  "files": ["dist", "src", "README.md", "CHANGELOG.md", "LICENSE"],
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup",
     "lint": "biome lint .",
@@ -46,5 +52,13 @@
     "tsup": "^8.3.6",
     "typescript": "^5.7.3"
   },
-  "keywords": ["aptos", "apt", "siwa", "web3", "blockchain", "dapps", "wallet"]
+  "keywords": [
+    "aptos",
+    "apt",
+    "siwa",
+    "web3",
+    "blockchain",
+    "dapps",
+    "wallet"
+  ]
 }
