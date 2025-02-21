@@ -1,31 +1,50 @@
 # Sign in with Aptos
 
-## Examples
+The "Sign in with Aptos" (SIWA) standard introduces a secure and user-friendly way for users to authenticate to off-chain resources by proving ownership of their Aptos account. It simplifies the authentication process by replacing the traditional connect + signMessage flow in the wallet standard with a streamlined one-click signIn method. SIWA leverages Aptos accounts to avoid reliance on traditional schemes like SSO while incorporating security measures to combat phishing attacks and improve user visibility.
 
-To run an example, you can run one of the following commands from the root of the project:
+## Getting Started
 
-### Vite Example
+### Prerequisites
 
-This example will run both a Vite frontend and a backend Hono server with authentication and profile editing.
+Check out [`.tool-versions`](.tool-versions) for runtime requirements.
 
-```sh
-pnpm run vite-example
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/aptos-labs/sign-in-with-aptos.git
+cd sign-in-with-aptos
 ```
 
-Open http://localhost:5173 in your browser to view the frontend.
+2. Install runtimes (mise)
 
+```bash
+mise install
+```
 
----
+If `mise` is not installed, check out their [Getting Started](https://mise.jdx.dev/getting-started.html) page.
 
+3. Install dependencies:
 
-# Turborepo Design System starter with Changesets
+```bash
+pnpm install
+```
 
-This is an official React design system starter powered by Turborepo. Versioning and package publishing is handled by [Changesets](https://github.com/changesets/changesets) and fully automated with GitHub Actions.
+4. Build packages:
 
-## Versioning and Publishing packages
+```bash
+pnpm build
+```
 
-Package publishing has been configured using [Changesets](https://github.com/changesets/changesets). Please review their [documentation](https://github.com/changesets/changesets#documentation) to familiarize yourself with the workflow.
+### Development
 
-This example comes with automated npm releases setup in a [GitHub Action](https://github.com/changesets/action). To get this working, you will need to create an `NPM_TOKEN` and `GITHUB_TOKEN` in your repository settings. You should also install the [Changesets bot](https://github.com/apps/changeset-bot) on your GitHub repository as well.
+#### Vite + Hono Example
 
-For more information about this automation, refer to the official [changesets documentation](https://github.com/changesets/changesets/blob/main/docs/automating-changesets.md)
+From the root of the repository, run:
+
+```bash
+pnpm vite-example
+```
+
+This will start up both the Vite frontend and the Hono backend for SIWA using Turborepo.
