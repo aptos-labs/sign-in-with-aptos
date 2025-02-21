@@ -7,8 +7,10 @@
     "build": "next build",
     "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write ."
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write ."
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",

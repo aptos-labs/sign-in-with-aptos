@@ -12,11 +12,11 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo build --filter=@aptos-labs/siwa && changeset publish",
-    "vite-example": "turbo dev --filter=@aptos-labs/siwa-vite-example --filter=@aptos-labs/siwa-backend-example --ui tui"
+    "vite-example": "turbo dev --filter=@aptos-labs/siwa-vite --filter=@aptos-labs/siwa-backend --ui tui"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@changesets/cli": "^2.27.11",
+    "@changesets/cli": "^2.28.1",
     "@types/node": "22.13.4",
     "@vitest/coverage-v8": "^3.0.5",
     "turbo": "^2.4.2",

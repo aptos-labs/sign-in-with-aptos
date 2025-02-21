@@ -1,17 +1,21 @@
 {
-  "name": "@aptos-labs/siwa-vite-example",
+  "name": "@aptos-labs/siwa-vite",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@aptos-labs/siwa": "workspace:*",
     "@aptos-labs/ts-sdk": "^1.33.2",
-    "@aptos-labs/wallet-adapter-react": "^3.7.11",
+    "@aptos-labs/wallet-adapter-react": "^4.1.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-collapsible": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -36,7 +40,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.7",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react-swc": "^3.8.0",

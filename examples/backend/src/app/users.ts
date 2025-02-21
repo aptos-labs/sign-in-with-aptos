@@ -20,7 +20,7 @@ users.put(
     z.object({
       name: z.string().optional(),
       favoriteColor: z.string().optional(),
-    })
+    }),
   ),
   async (c) => {
     const { user } = await validateSessionToken(c);
@@ -37,7 +37,7 @@ users.put(
       .where(eq(userTable.id, user.id));
 
     return c.json({ data: true });
-  }
+  },
 );
 
 users.post("/user/logout", async (c) => {

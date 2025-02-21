@@ -28,7 +28,7 @@ export const userTable = sqliteTable(
     name: text("name"),
     favoriteColor: text("favorite_color"),
   },
-  () => []
+  () => [],
 );
 
 export const sessionTable = sqliteTable(
@@ -42,7 +42,7 @@ export const sessionTable = sqliteTable(
       mode: "timestamp",
     }).notNull(),
   },
-  () => []
+  () => [],
 );
 
 export type User = InferSelectModel<typeof userTable>;

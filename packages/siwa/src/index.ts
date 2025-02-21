@@ -8,3 +8,8 @@ export {
 } from "./types.js";
 export * from "./utils.js";
 export * from "./serializers.js";
+export type {
+  AptosSignInInput,
+  AptosSignInOutput,
+  AptosSignInRequiredFields,
+} from "@aptos-labs/wallet-standard";

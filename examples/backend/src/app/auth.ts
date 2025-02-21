@@ -1,9 +1,9 @@
 import {
+  type AptosSignInInput,
   deserializeSignInOutput,
   generateNonce,
   verifySignIn,
 } from "@aptos-labs/siwa";
-import type { AptosSignInInput } from "@aptos-labs/wallet-standard";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
@@ -25,20 +25,6 @@ auth.get("/auth/siwa", (c) => {
     sameSite: "lax",
   });
 
-  return c.json({ data: input });
-});
-
-auth.get("/auth/siwa/error", (c) => {
-  const nonce = generateNonce();
-  const input = {
-    nonce,
-    uri: "https://instagram.com/",
-    statement: "Sign into to get access to this demo application",
-  } satisfies AptosSignInInput;
-  setCookie(c, "siwa-input", JSON.stringify(input), {
-    httpOnly: true,
-    sameSite: "lax",
-  });
   return c.json({ data: input });
 });
 
@@ -90,5 +76,19 @@ auth.post(
     return c.json({ data: true });
   },
 );
+
+auth.get("/auth/siwa/error", (c) => {
+  const nonce = generateNonce();
+  const input = {
+    nonce,
+    uri: "https://instagram.com/",
+    statement: "Sign into to get access to this demo application",
+  } satisfies AptosSignInInput;
+  setCookie(c, "siwa-input", JSON.stringify(input), {
+    httpOnly: true,
+    sameSite: "lax",
+  });
+  return c.json({ data: input });
+});
 
 export default auth;
