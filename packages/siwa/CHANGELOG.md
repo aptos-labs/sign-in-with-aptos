@@ -1,5 +1,11 @@
 # @aptos-labs/siwa
 
+## 0.2.3
+
+### Patch Changes
+
+- 2d19b1a: Export wallet-standard types from @aptos-labs/siwa
+
 ## 0.2.2
 
 ### Patch Changes
