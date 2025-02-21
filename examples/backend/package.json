@@ -11,17 +11,17 @@
   },
   "dependencies": {
     "@aptos-labs/siwa": "workspace:*",
-    "@hono/node-server": "^1.13.7",
-    "@hono/zod-validator": "^0.4.2",
+    "@hono/node-server": "^1.13.8",
+    "@hono/zod-validator": "^0.4.3",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
-    "better-sqlite3": "^11.8.0",
-    "drizzle-orm": "^0.38.4",
-    "hono": "^4.6.16",
-    "zod": "^3.24.1"
+    "better-sqlite3": "^11.8.1",
+    "drizzle-orm": "^0.39.3",
+    "hono": "^4.7.2",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.3"
   }
 }
