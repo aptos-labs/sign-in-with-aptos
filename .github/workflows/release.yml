@@ -23,8 +23,8 @@ jobs:
         uses: actions/create-github-app-token@v1
         id: generate-token
         with:
-          app-id: ${{ secrets.SIGN_IN_WITH_APTOS_ACTIONS_APP_ID }}
-          private-key: ${{ secrets.SIGN_IN_WITH_APTOS_ACTIONS_PRIVATE_KEY }}
+          app-id: ${{ vars.APTOS_LABS_BOT_APP_ID }}
+          private-key: ${{ secrets.APTOS_LABS_BOT_APP_PRIVATE_KEY }}
 
       - name: Setup pnpm 10
         uses: pnpm/action-setup@v3
