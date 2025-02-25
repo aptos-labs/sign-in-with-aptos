@@ -1,5 +1,12 @@
 # @aptos-labs/siwa
 
+## 0.2.5
+
+### Patch Changes
+
+- 64510d4: Update `getSignInPublicKeyScheme` to support object instances
+- 64510d4: Renamed `verifyLegacySignIn`'s `output.fullMessage` to `output.message`
+
 ## 0.2.4
 
 ### Patch Changes
