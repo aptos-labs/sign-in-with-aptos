@@ -24,7 +24,10 @@ export type DeserializedAptosSignInOutput = {
 };
 
 export const serializeSignInOutput = (
-  output: AptosSignInOutput,
+  output: Pick<
+    AptosSignInOutput,
+    "type" | "signature" | "plainText" | "account"
+  >,
 ): SerializedAptosSignInOutput => ({
   version: SERIALIZATION_VERSION,
   type: output.type,

@@ -31,7 +31,7 @@ describe("verifySignIn", () => {
     const result = verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
-      fullMessage: fullMessage,
+      message: fullMessage,
     });
 
     expect(result.valid).toBe(true);
@@ -60,7 +60,7 @@ describe("verifySignIn", () => {
     const result = verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
-      fullMessage: fullMessage,
+      message: fullMessage,
     });
 
     expect(result.valid).toBe(false);
@@ -77,7 +77,7 @@ describe("verifySignIn", () => {
     const result = verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
-      fullMessage: fullMessage,
+      message: fullMessage,
     });
 
     expect(result.valid).toBe(false);
@@ -93,7 +93,7 @@ describe("verifySignIn", () => {
     const result = verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: new Ed25519Signature(new Uint8Array(64)),
-      fullMessage: fullMessage,
+      message: fullMessage,
     });
 
     expect(result.valid).toBe(false);

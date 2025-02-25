@@ -1,5 +1,5 @@
 import {
-  PublicKey,
+  type PublicKey,
   SigningScheme,
   Ed25519PublicKey,
   MultiEd25519PublicKey,
@@ -45,20 +45,20 @@ export function getSignInPublicKeyScheme(
   value: SigningScheme | PublicKey,
 ): string {
   // If the value is a PublicKey
-  if (value instanceof PublicKey) {
-    if (value instanceof Ed25519PublicKey) {
+  if (typeof value === "object") {
+    if (Ed25519PublicKey.isInstance(value)) {
       return "ed25519";
+    }
+    if (AnyPublicKey.isInstance(value)) {
+      return "single_key";
+    }
+    if (MultiKey.isInstance(value)) {
+      return "multi_key";
     }
     if (value instanceof MultiEd25519PublicKey) {
       return "multi_ed25519";
     }
-    if (value instanceof AnyPublicKey) {
-      return "single_key";
-    }
-    if (value instanceof MultiKey) {
-      return "multi_key";
-    }
-    throw new Error(`Unknown public key instance: ${value}`);
+    throw new Error(`Unknown public key type for instance: ${value}`);
   }
 
   // If the value is a SigningScheme

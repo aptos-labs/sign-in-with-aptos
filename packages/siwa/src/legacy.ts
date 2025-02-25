@@ -25,18 +25,15 @@ export const createLegacySignInMessage = (
 
 export const verifyLegacySignIn = (
   input: AptosSignInInput & AptosSignInRequiredFields,
-  output: { publicKey: PublicKey; signature: Signature; fullMessage: string },
+  output: { publicKey: PublicKey; signature: Signature; message: string },
 ): LegacyVerificationResult<AptosSignInInput & AptosSignInRequiredFields> => {
   const embeddedMessage = createLegacySignInMessage(input);
 
-  if (!output.fullMessage.includes(embeddedMessage)) {
+  if (!output.message.includes(embeddedMessage)) {
     return { valid: false, errors: ["invalid_full_message"] };
   }
 
-  const isSignatureValid = output.publicKey.verifySignature({
-    message: output.fullMessage,
-    signature: output.signature,
-  });
+  const isSignatureValid = output.publicKey.verifySignature(output);
   if (!isSignatureValid) return { valid: false, errors: ["invalid_signature"] };
 
   return { valid: true, data: input };

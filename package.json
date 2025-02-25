@@ -12,7 +12,8 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo build --filter=@aptos-labs/siwa && changeset publish",
-    "vite-example": "turbo dev --filter=@aptos-labs/siwa-vite --filter=@aptos-labs/siwa-backend --ui tui"
+    "vite-example": "turbo dev --filter=@aptos-labs/siwa-vite --filter=@aptos-labs/siwa-backend --ui tui",
+    "vite-legacy-example": "turbo dev --filter=@aptos-labs/siwa-vite-legacy --filter=@aptos-labs/siwa-backend --ui tui"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
