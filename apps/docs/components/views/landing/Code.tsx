@@ -44,7 +44,7 @@ auth.post(
 
     const deserializedOutput = deserializeSignInOutput(output);
 
-    const verification = verifySignIn(
+    const verification = await verifySignIn(
       {
         ...(JSON.parse(input) as AptosSignInInput),
         domain: FRONTEND_URL,

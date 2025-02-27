@@ -1,4 +1,9 @@
-import type { PublicKey, Signature } from "@aptos-labs/ts-sdk";
+import {
+  AptosConfig,
+  Network,
+  type PublicKey,
+  type Signature,
+} from "@aptos-labs/ts-sdk";
 import type {
   AptosSignInInput,
   AptosSignInRequiredFields,
@@ -10,6 +15,7 @@ import type {
   VerificationMessageError,
   VerificationResult,
 } from "./types.js";
+import { verifySignature } from "./signatures.js";
 
 /**
  * Create a SignIn message text from the input following the ABNF format defined in the Sign in with Aptos
@@ -204,11 +210,13 @@ export function verifySignInMessage(
  *
  * @returns The verification result.
  */
-export function verifySignIn(
+export async function verifySignIn(
   input: AptosSignInInput & { domain: string },
   output: { publicKey: PublicKey; signature: Signature; message: string },
-  options?: { excludedResources?: string[] },
-): VerificationResult<AptosSignInInput & AptosSignInRequiredFields> {
+  options: { excludedResources?: string[]; aptosConfig: AptosConfig } = {
+    aptosConfig: new AptosConfig({ network: Network.MAINNET }),
+  },
+): Promise<VerificationResult<AptosSignInInput & AptosSignInRequiredFields>> {
   const messageVerification = verifySignInMessage(
     input,
     output.message,
@@ -216,10 +224,8 @@ export function verifySignIn(
   );
   if (!messageVerification.valid) return messageVerification;
 
-  const isSignatureValid = output.publicKey.verifySignature({
-    message: generateSignInSigningMessage(output.message),
-    signature: output.signature,
-  });
+  const isSignatureValid = await verifySignature(output, options);
+
   if (!isSignatureValid) return { valid: false, errors: ["invalid_signature"] };
 
   return { valid: true, data: messageVerification.data };

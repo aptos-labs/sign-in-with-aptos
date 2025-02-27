@@ -1,4 +1,10 @@
-import { Hex, type PublicKey, type Signature } from "@aptos-labs/ts-sdk";
+import {
+  AptosConfig,
+  Hex,
+  Network,
+  type PublicKey,
+  type Signature,
+} from "@aptos-labs/ts-sdk";
 import type {
   AptosSignInInput,
   AptosSignInRequiredFields,
@@ -6,6 +12,7 @@ import type {
 import { sha3_256 } from "@noble/hashes/sha3";
 import { createSignInMessageText } from "./core.js";
 import type { VerificationError } from "./types.js";
+import { verifySignature } from "./signatures.js";
 
 export type VerificationFullMessageError = "invalid_full_message";
 
@@ -23,17 +30,26 @@ export const createLegacySignInMessage = (
   return message;
 };
 
-export const verifyLegacySignIn = (
+export const verifyLegacySignIn = async (
   input: AptosSignInInput & AptosSignInRequiredFields,
   output: { publicKey: PublicKey; signature: Signature; message: string },
-): LegacyVerificationResult<AptosSignInInput & AptosSignInRequiredFields> => {
+  options: { aptosConfig: AptosConfig } = {
+    aptosConfig: new AptosConfig({ network: Network.MAINNET }),
+  },
+): Promise<
+  LegacyVerificationResult<AptosSignInInput & AptosSignInRequiredFields>
+> => {
   const embeddedMessage = createLegacySignInMessage(input);
 
   if (!output.message.includes(embeddedMessage)) {
     return { valid: false, errors: ["invalid_full_message"] };
   }
 
-  const isSignatureValid = output.publicKey.verifySignature(output);
+  const isSignatureValid = await verifySignature(output, {
+    aptosConfig: options.aptosConfig,
+    isSigningMessage: true,
+  });
+
   if (!isSignatureValid) return { valid: false, errors: ["invalid_signature"] };
 
   return { valid: true, data: input };

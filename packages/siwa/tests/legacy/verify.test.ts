@@ -23,12 +23,12 @@ const defaultFieldsInput = {
 describe("verifySignIn", () => {
   const publicKey = ed25519Account.publicKey;
 
-  test("verifies valid signature and message", () => {
+  test("verifies valid signature and message", async () => {
     const fullMessage = creageLegacyFullMessage({
       message: createLegacySignInMessage(defaultFieldsInput),
     });
 
-    const result = verifyLegacySignIn(defaultFieldsInput, {
+    const result = await verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
       message: fullMessage,
@@ -49,7 +49,7 @@ describe("verifySignIn", () => {
     }
   });
 
-  test("fails when signature is invalid with more fields", () => {
+  test("fails when signature is invalid with more fields", async () => {
     const fullMessage = creageLegacyFullMessage({
       message: createLegacySignInMessage({
         ...defaultFieldsInput,
@@ -57,7 +57,7 @@ describe("verifySignIn", () => {
       }),
     });
 
-    const result = verifyLegacySignIn(defaultFieldsInput, {
+    const result = await verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
       message: fullMessage,
@@ -66,7 +66,7 @@ describe("verifySignIn", () => {
     expect(result.valid).toBe(false);
   });
 
-  test("fails when signature is invalid with less fields", () => {
+  test("fails when signature is invalid with less fields", async () => {
     const fullMessage = creageLegacyFullMessage({
       message: createLegacySignInMessage({
         ...defaultFieldsInput,
@@ -74,7 +74,7 @@ describe("verifySignIn", () => {
       } as any),
     });
 
-    const result = verifyLegacySignIn(defaultFieldsInput, {
+    const result = await verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
       message: fullMessage,
@@ -83,14 +83,14 @@ describe("verifySignIn", () => {
     expect(result.valid).toBe(false);
   });
 
-  test("fails when signature is invalid", () => {
+  test("fails when signature is invalid", async () => {
     const fullMessage = creageLegacyFullMessage({
       message: createLegacySignInMessage({
         ...defaultFieldsInput,
       }),
     });
 
-    const result = verifyLegacySignIn(defaultFieldsInput, {
+    const result = await verifyLegacySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: new Ed25519Signature(new Uint8Array(64)),
       message: fullMessage,

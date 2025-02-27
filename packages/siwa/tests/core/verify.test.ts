@@ -36,7 +36,7 @@ describe("verifySignInMessage", () => {
   test("verifies matching input and string message", () => {
     const result = verifySignInMessage(
       defaultFieldsInput,
-      createSignInMessageText(defaultFieldsInput)
+      createSignInMessageText(defaultFieldsInput),
     );
     expect(result.valid).toBe(true);
     if (result.valid)
@@ -61,7 +61,7 @@ describe("verifySignInMessage", () => {
   test("fails when invalid string message", () => {
     const result = verifySignInMessage(
       defaultFieldsInput,
-      "Invalid message format"
+      "Invalid message format",
     );
     expect(result.valid).toBe(false);
     if (!result.valid) expect(result.errors).toEqual(["invalid_message"]);
@@ -87,7 +87,7 @@ describe("verifySignInMessage", () => {
   ])("fails when %s mismatch", (field, value, expectedError) => {
     const result = verifySignInMessage(
       { ...defaultFieldsInput, [field]: value },
-      createSignInMessageText(defaultFieldsInput)
+      createSignInMessageText(defaultFieldsInput),
     );
     expect(result.valid).toBe(false);
     if (!result.valid) {
@@ -98,7 +98,7 @@ describe("verifySignInMessage", () => {
   test("fails when resources is missing", () => {
     const result = verifySignInMessage(
       { ...defaultFieldsInput, resources: ["resource1"] },
-      createSignInMessageText(defaultFieldsInput)
+      createSignInMessageText(defaultFieldsInput),
     );
     expect(result.valid).toBe(false);
     if (!result.valid)
@@ -108,7 +108,7 @@ describe("verifySignInMessage", () => {
   test("fails when resources mismatch", () => {
     const result = verifySignInMessage(
       { ...extraFieldsInput, resources: ["resource1"] },
-      createSignInMessageText(extraFieldsInput)
+      createSignInMessageText(extraFieldsInput),
     );
     expect(result.valid).toBe(false);
     if (!result.valid)
@@ -118,7 +118,7 @@ describe("verifySignInMessage", () => {
   test("fails when resources is unexpected", () => {
     const result = verifySignInMessage(
       { ...extraFieldsInput, resources: undefined },
-      createSignInMessageText(extraFieldsInput)
+      createSignInMessageText(extraFieldsInput),
     );
     expect(result.valid).toBe(false);
     if (!result.valid)
@@ -132,7 +132,7 @@ describe("verifySignInMessage", () => {
         ...extraFieldsInput,
         resources: ["resource1", "resource2:placeholder"],
       }),
-      { excludedResources: ["resource2"] }
+      { excludedResources: ["resource2"] },
     );
     expect(result.valid).toBe(true);
   });
@@ -141,9 +141,9 @@ describe("verifySignInMessage", () => {
 describe("verifySignIn", () => {
   const publicKey = ed25519Account.publicKey;
 
-  test("verifies valid signature and message", () => {
+  test("verifies valid signature and message", async () => {
     const message = createSignInMessageText(defaultFieldsInput);
-    const result = verifySignIn(defaultFieldsInput, {
+    const result = await verifySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(generateSignInSigningMessage(message)),
       message,
@@ -168,9 +168,9 @@ describe("verifySignIn", () => {
     `);
   });
 
-  test("fails when signature is invalid", () => {
+  test("fails when signature is invalid", async () => {
     const message = createSignInMessageText(defaultFieldsInput);
-    const result = verifySignIn(defaultFieldsInput, {
+    const result = await verifySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: new Ed25519Signature(new Uint8Array(64)),
       message,
@@ -179,9 +179,9 @@ describe("verifySignIn", () => {
     if (!result.valid) expect(result.errors).toEqual(["invalid_signature"]);
   });
 
-  test("fails when message verification fails", () => {
+  test("fails when message verification fails", async () => {
     const message = createSignInMessageText(defaultFieldsInput);
-    const result = verifySignIn(defaultFieldsInput, {
+    const result = await verifySignIn(defaultFieldsInput, {
       publicKey: publicKey,
       signature: ed25519Account.sign(message),
       message: "Invalid message format",

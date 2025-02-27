@@ -12,10 +12,12 @@ import { toast } from "sonner";
 
 interface ConnectButtonProps extends ButtonProps {
   siwaVariant?: "default" | "error";
+  walletName?: string;
 }
 
 export default function ConnectButton({
   siwaVariant = "default",
+  walletName = "Petra",
   ...props
 }: ConnectButtonProps) {
   const { user, isLoggedIn } = useUser();
@@ -29,7 +31,7 @@ export default function ConnectButton({
         ? fetchSignInInput()
         : fetchSignInErrorInput());
 
-      const output = await signIn({ walletName: "Petra", input: input.data });
+      const output = await signIn({ walletName, input: input.data });
 
       if (typeof output !== "object")
         throw new Error("An issue occurred while signing in.");
