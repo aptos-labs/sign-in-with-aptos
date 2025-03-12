@@ -1,4 +1,7 @@
 import {
+  AccountAddress,
+  AccountPublicKey,
+  Aptos,
   AptosConfig,
   Hex,
   Network,
@@ -32,7 +35,11 @@ export const createLegacySignInMessage = (
 
 export const verifyLegacySignIn = async (
   input: AptosSignInInput & AptosSignInRequiredFields,
-  output: { publicKey: PublicKey; signature: Signature; message: string },
+  output: {
+    publicKey: PublicKey;
+    signature: Signature;
+    message: string;
+  },
   options: { aptosConfig: AptosConfig } = {
     aptosConfig: new AptosConfig({ network: Network.MAINNET }),
   },
@@ -43,6 +50,24 @@ export const verifyLegacySignIn = async (
 
   if (!output.message.includes(embeddedMessage)) {
     return { valid: false, errors: ["invalid_full_message"] };
+  }
+
+  if (!(output.publicKey instanceof AccountPublicKey)) {
+    return { valid: false, errors: ["invalid_public_key"] };
+  }
+
+  const authKey = output.publicKey.authKey().derivedAddress();
+
+  const originalAddress = await new Aptos(
+    options.aptosConfig,
+  ).lookupOriginalAccountAddress({ authenticationKey: authKey });
+
+  if (
+    !AccountAddress.from(input.address, {
+      maxMissingChars: 63,
+    }).equals(originalAddress)
+  ) {
+    return { valid: false, errors: ["invalid_auth_key"] };
   }
 
   const isSignatureValid = await verifySignature(output, {

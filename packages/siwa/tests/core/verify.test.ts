@@ -2,10 +2,16 @@ import { describe, expect, test } from "vitest";
 import {
   createSignInMessageText,
   verifySignInMessage,
-  verifySignIn,
+  verifySignInSignature,
   generateSignInSigningMessage,
 } from "../../src/core.js";
-import { Ed25519Signature } from "@aptos-labs/ts-sdk";
+import {
+  Ed25519Account,
+  Ed25519Signature,
+  Network,
+  AptosConfig,
+  type PublicKey,
+} from "@aptos-labs/ts-sdk";
 import { ed25519Account } from "../lib/constants.js";
 import type {
   AptosSignInInput,
@@ -15,7 +21,7 @@ import type {
 const defaultFieldsInput = {
   domain: "example.com",
   uri: "https://example.com",
-  address: "0x123",
+  address: ed25519Account.accountAddress.toString(),
   version: "1",
   chainId: "aptos:mainnet",
   nonce: "abc123",
@@ -33,16 +39,17 @@ const extraFieldsInput = {
 } satisfies AptosSignInInput & AptosSignInRequiredFields;
 
 describe("verifySignInMessage", () => {
-  test("verifies matching input and string message", () => {
-    const result = verifySignInMessage(
-      defaultFieldsInput,
-      createSignInMessageText(defaultFieldsInput),
-    );
+  test("verifies matching input and string message", async () => {
+    const result = await verifySignInMessage({
+      expected: defaultFieldsInput,
+      message: createSignInMessageText(defaultFieldsInput),
+      publicKey: ed25519Account.publicKey,
+    });
     expect(result.valid).toBe(true);
     if (result.valid)
       expect(result.data).toMatchInlineSnapshot(`
       {
-        "address": "0x123",
+        "address": "0x983bb18e768a1f736b6f0011a65833243fa7e3bf908b7f9535b1049d8307f328",
         "chainId": "aptos:mainnet",
         "domain": "example.com",
         "expirationTime": undefined,
@@ -58,11 +65,12 @@ describe("verifySignInMessage", () => {
     `);
   });
 
-  test("fails when invalid string message", () => {
-    const result = verifySignInMessage(
-      defaultFieldsInput,
-      "Invalid message format",
-    );
+  test("fails when invalid string message", async () => {
+    const result = await verifySignInMessage({
+      expected: defaultFieldsInput,
+      message: "Invalid message format",
+      publicKey: ed25519Account.publicKey,
+    });
     expect(result.valid).toBe(false);
     if (!result.valid) expect(result.errors).toEqual(["invalid_message"]);
   });
@@ -84,67 +92,100 @@ describe("verifySignInMessage", () => {
     ],
     ["notBefore", "2023-01-01T00:00:00Z", "message_not_before_mismatch"],
     ["requestId", "req456", "message_request_id_mismatch"],
-  ])("fails when %s mismatch", (field, value, expectedError) => {
-    const result = verifySignInMessage(
-      { ...defaultFieldsInput, [field]: value },
-      createSignInMessageText(defaultFieldsInput),
-    );
+  ])("fails when %s mismatch", async (field, value, expectedError) => {
+    const result = await verifySignInMessage({
+      expected: { ...defaultFieldsInput, [field]: value },
+      message: createSignInMessageText(defaultFieldsInput),
+      publicKey: ed25519Account.publicKey,
+    });
     expect(result.valid).toBe(false);
     if (!result.valid) {
       expect(result.errors).toEqual([expectedError]);
     }
   });
 
-  test("fails when resources is missing", () => {
-    const result = verifySignInMessage(
-      { ...defaultFieldsInput, resources: ["resource1"] },
-      createSignInMessageText(defaultFieldsInput),
-    );
+  test("fails when resources is missing", async () => {
+    const result = await verifySignInMessage({
+      expected: { ...defaultFieldsInput, resources: ["resource1"] },
+      message: createSignInMessageText(defaultFieldsInput),
+      publicKey: ed25519Account.publicKey,
+    });
     expect(result.valid).toBe(false);
     if (!result.valid)
       expect(result.errors).toEqual(["message_resources_missing"]);
   });
 
-  test("fails when resources mismatch", () => {
-    const result = verifySignInMessage(
-      { ...extraFieldsInput, resources: ["resource1"] },
-      createSignInMessageText(extraFieldsInput),
-    );
+  test("fails when resources mismatch", async () => {
+    const result = await verifySignInMessage({
+      expected: { ...extraFieldsInput, resources: ["resource1"] },
+      message: createSignInMessageText(extraFieldsInput),
+      publicKey: ed25519Account.publicKey,
+    });
     expect(result.valid).toBe(false);
     if (!result.valid)
       expect(result.errors).toEqual(["message_resources_mismatch"]);
   });
 
-  test("fails when resources is unexpected", () => {
-    const result = verifySignInMessage(
-      { ...extraFieldsInput, resources: undefined },
-      createSignInMessageText(extraFieldsInput),
-    );
+  test("fails when resources is unexpected", async () => {
+    const result = await verifySignInMessage({
+      expected: { ...extraFieldsInput, resources: undefined },
+      message: createSignInMessageText(extraFieldsInput),
+      publicKey: ed25519Account.publicKey,
+    });
     expect(result.valid).toBe(false);
     if (!result.valid)
       expect(result.errors).toEqual(["message_resources_unexpected"]);
   });
 
-  test("verifies when resources are excluded", () => {
-    const result = verifySignInMessage(
-      { ...extraFieldsInput },
-      createSignInMessageText({
-        ...extraFieldsInput,
-        resources: ["resource1", "resource2:placeholder"],
-      }),
-      { excludedResources: ["resource2"] },
+  test("fails when public key is invalid", async () => {
+    const message = createSignInMessageText(defaultFieldsInput);
+    const result = await verifySignInMessage({
+      expected: defaultFieldsInput,
+      message,
+      publicKey: {} as PublicKey,
+    });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.errors).toEqual(["invalid_public_key"]);
+  });
+
+  test("fails when public key's auth key does not match message address", async () => {
+    const account = Ed25519Account.generate();
+    const message = createSignInMessageText(defaultFieldsInput);
+    const result = await verifySignInMessage({
+      expected: defaultFieldsInput,
+      message,
+      publicKey: account.publicKey,
+    });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.errors).toEqual(["invalid_auth_key"]);
+  });
+
+  test("verifies when resources are excluded", async () => {
+    const result = await verifySignInMessage(
+      {
+        expected: { ...extraFieldsInput },
+        message: createSignInMessageText({
+          ...extraFieldsInput,
+          resources: ["resource1", "resource2:placeholder"],
+        }),
+        publicKey: ed25519Account.publicKey,
+      },
+      {
+        aptosConfig: new AptosConfig({ network: Network.MAINNET }),
+        excludedResources: ["resource2"],
+      },
     );
     expect(result.valid).toBe(true);
   });
 });
 
-describe("verifySignIn", () => {
+describe("verifySignInSignature", () => {
   const publicKey = ed25519Account.publicKey;
 
   test("verifies valid signature and message", async () => {
     const message = createSignInMessageText(defaultFieldsInput);
-    const result = await verifySignIn(defaultFieldsInput, {
-      publicKey: publicKey,
+    const result = await verifySignInSignature({
+      publicKey,
       signature: ed25519Account.sign(generateSignInSigningMessage(message)),
       message,
     });
@@ -152,7 +193,7 @@ describe("verifySignIn", () => {
     if (result.valid)
       expect(result.data).toMatchInlineSnapshot(`
       {
-        "address": "0x123",
+        "address": "0x983bb18e768a1f736b6f0011a65833243fa7e3bf908b7f9535b1049d8307f328",
         "chainId": "aptos:mainnet",
         "domain": "example.com",
         "expirationTime": undefined,
@@ -170,8 +211,8 @@ describe("verifySignIn", () => {
 
   test("fails when signature is invalid", async () => {
     const message = createSignInMessageText(defaultFieldsInput);
-    const result = await verifySignIn(defaultFieldsInput, {
-      publicKey: publicKey,
+    const result = await verifySignInSignature({
+      publicKey,
       signature: new Ed25519Signature(new Uint8Array(64)),
       message,
     });
@@ -181,7 +222,7 @@ describe("verifySignIn", () => {
 
   test("fails when message verification fails", async () => {
     const message = createSignInMessageText(defaultFieldsInput);
-    const result = await verifySignIn(defaultFieldsInput, {
+    const result = await verifySignInSignature({
       publicKey: publicKey,
       signature: ed25519Account.sign(message),
       message: "Invalid message format",

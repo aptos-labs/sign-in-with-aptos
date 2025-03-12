@@ -2,7 +2,8 @@ import {
   type AptosSignInInput,
   deserializeSignInOutput,
   generateNonce,
-  verifySignIn,
+  verifySignInMessage,
+  verifySignInSignature,
 } from "@aptos-labs/siwa";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
@@ -50,23 +51,32 @@ auth.post(
 
     const deserializedOutput = deserializeSignInOutput(output);
 
-    const verification = await verifySignIn(
-      {
-        ...(JSON.parse(input) as AptosSignInInput),
-        domain: "localhost:5173",
-      },
-      deserializedOutput,
-    );
+    const signatureVerification =
+      await verifySignInSignature(deserializedOutput);
 
-    if (!verification.valid) {
-      return c.json({ error: `${verification.errors.join(", ")}` }, 400);
+    if (!signatureVerification.valid) {
+      return c.json(
+        { error: `${signatureVerification.errors.join(", ")}` },
+        400,
+      );
     }
 
-    let user = await getUserByAddress(verification.data.address);
-    if (!user) user = await createUserByAddress(verification.data.address);
+    const messageVerification = verifySignInMessage(
+      { ...(JSON.parse(input) as AptosSignInInput), domain: "localhost:5173" },
+      deserializedOutput.message,
+    );
+
+    if (!messageVerification.valid) {
+      return c.json({ error: `${messageVerification.errors.join(", ")}` }, 400);
+    }
+
+    let user = await getUserByAddress(messageVerification.data.address);
+    if (!user) {
+      user = await createUserByAddress(messageVerification.data.address);
+    }
 
     const token = generateSessionToken();
-    await createSession(token, verification.data.address);
+    await createSession(token, messageVerification.data.address);
 
     setCookie(c, "session", token, {
       httpOnly: true,

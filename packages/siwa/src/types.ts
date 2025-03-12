@@ -29,7 +29,10 @@ export type VerificationComparisonError =
   | "message_resources_mismatch"
   | "message_resources_unexpected";
 
-export type VerificationSignatureError = "invalid_signature";
+export type VerificationSignatureError =
+  | "invalid_signature"
+  | "invalid_public_key"
+  | "invalid_auth_key";
 
 export type VerificationMessageError =
   | "invalid_message"

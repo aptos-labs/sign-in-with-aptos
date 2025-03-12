@@ -3,7 +3,6 @@ import {
   type AptosSignInRequiredFields,
   deserializeSignInOutput,
   generateNonce,
-  verifySignIn,
 } from "@aptos-labs/siwa";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
@@ -64,7 +63,7 @@ legacyAuth.post(
 
     const deserializedOutput = deserializeSignInOutput(output);
 
-    const verification = verifyLegacySignIn(
+    const verification = await verifyLegacySignIn(
       JSON.parse(input) as AptosSignInInput & AptosSignInRequiredFields,
       deserializedOutput,
     );

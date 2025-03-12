@@ -14,10 +14,10 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Setup pnpm 10
-        uses: pnpm/action-setup@v3
+      - name: Setup pnpm 10.6.4
+        uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 10.6.4
 
       - name: Setup Node.js 22.x
         uses: actions/setup-node@v4

@@ -9,27 +9,27 @@ import {
   verifyLegacySignIn,
 } from "../../src/legacy.js";
 import { ed25519Account } from "../lib/constants.js";
-import { creageLegacyFullMessage } from "../lib/helpers.js";
+import { createLegacyFullMessage } from "../lib/helpers.js";
 
 const defaultFieldsInput = {
   domain: "example.com",
   uri: "https://example.com",
-  address: "0x0000000000000000000000000000000000000000000000000000000000000001",
+  address: ed25519Account.accountAddress.toString(),
   version: "1",
   chainId: "aptos:mainnet",
   nonce: "abc123",
 } satisfies AptosSignInInput & AptosSignInRequiredFields;
 
-describe("verifySignIn", () => {
+describe("verifySignInSignature", () => {
   const publicKey = ed25519Account.publicKey;
 
   test("verifies valid signature and message", async () => {
-    const fullMessage = creageLegacyFullMessage({
+    const fullMessage = createLegacyFullMessage({
       message: createLegacySignInMessage(defaultFieldsInput),
     });
 
     const result = await verifyLegacySignIn(defaultFieldsInput, {
-      publicKey: publicKey,
+      publicKey,
       signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
       message: fullMessage,
     });
@@ -38,7 +38,7 @@ describe("verifySignIn", () => {
     if (result.valid) {
       expect(result.data).toMatchInlineSnapshot(`
       {
-        "address": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "address": "0x983bb18e768a1f736b6f0011a65833243fa7e3bf908b7f9535b1049d8307f328",
         "chainId": "aptos:mainnet",
         "domain": "example.com",
         "nonce": "abc123",
@@ -50,7 +50,7 @@ describe("verifySignIn", () => {
   });
 
   test("fails when signature is invalid with more fields", async () => {
-    const fullMessage = creageLegacyFullMessage({
+    const fullMessage = createLegacyFullMessage({
       message: createLegacySignInMessage({
         ...defaultFieldsInput,
         resources: ["resource1", "resource2"],
@@ -67,7 +67,7 @@ describe("verifySignIn", () => {
   });
 
   test("fails when signature is invalid with less fields", async () => {
-    const fullMessage = creageLegacyFullMessage({
+    const fullMessage = createLegacyFullMessage({
       message: createLegacySignInMessage({
         ...defaultFieldsInput,
         nonce: undefined,
@@ -84,7 +84,7 @@ describe("verifySignIn", () => {
   });
 
   test("fails when signature is invalid", async () => {
-    const fullMessage = creageLegacyFullMessage({
+    const fullMessage = createLegacyFullMessage({
       message: createLegacySignInMessage({
         ...defaultFieldsInput,
       }),

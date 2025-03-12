@@ -1,4 +1,4 @@
-export const creageLegacyFullMessage = (params: {
+export const createLegacyFullMessage = (params: {
   address?: string;
   application?: string;
   chainId?: string;

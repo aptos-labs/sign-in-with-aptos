@@ -1,4 +1,7 @@
 import {
+  AccountAddress,
+  AccountPublicKey,
+  Aptos,
   AptosConfig,
   Network,
   type PublicKey,
@@ -90,6 +93,13 @@ const RESOURCES = "(?:\\nResources:(?<resources>(?:\\n- [^\\n]+)*))?";
 const FIELDS = `${URI}${VERSION}${NONCE}${ISSUED_AT}${EXPIRATION_TIME}${NOT_BEFORE}${REQUEST_ID}${CHAIN_ID}${RESOURCES}`;
 const MESSAGE = new RegExp(`^${DOMAIN}${ADDRESS}${STATEMENT}${FIELDS}\\n*$`);
 
+/**
+ * Parse a SIWA message into an `AptosSignInInput` object with the required fields.
+ *
+ * @param text The SIWA message to parse.
+ *
+ * @returns The parsed `AptosSignInInput` object with the required fields.
+ */
 export function parseSignInMessageText(
   text: string,
 ): VerificationResult<AptosSignInInput & AptosSignInRequiredFields> {
@@ -132,59 +142,88 @@ export function parseSignInMessageText(
 }
 
 /**
- * Verifies an input SignIn message against expected fields.
+ * Verifies a SIWA plain text message against expected `AptosSignInInput` fields (including required fields).
  *
- * @param input The input to verify the message against.
- * @param expected The expected message to verify against the input.
+ * @param params.publicKey The public key of the user that is signing in.
+ * @param params.expected The expected fields to verify against the input.
+ * @param params.message The SIWA plain text message to verify.
+ *
+ * @param options.aptosConfig The Aptos configuration to use for the verification.
+ * @param options.excludedResources The resources to exclude from the verification.
  *
  * @returns The verification result.
  */
-export function verifySignInMessage(
-  input: AptosSignInInput,
-  expected: string,
-  options?: { excludedResources?: string[] },
-): VerificationResult<AptosSignInInput & AptosSignInRequiredFields> {
-  const parsedFields = parseSignInMessageText(expected);
+export async function verifySignInMessage(
+  input: {
+    publicKey: PublicKey;
+    expected: AptosSignInInput & { domain: string };
+    message: string;
+  },
+  options: { aptosConfig: AptosConfig; excludedResources?: string[] } = {
+    aptosConfig: new AptosConfig({ network: Network.MAINNET }),
+  },
+): Promise<VerificationResult<AptosSignInInput & AptosSignInRequiredFields>> {
+  const { expected, message } = input;
+
+  const parsedFields = parseSignInMessageText(message);
   if (!parsedFields.valid) return parsedFields;
+
+  if (!(input.publicKey instanceof AccountPublicKey)) {
+    return { valid: false, errors: ["invalid_public_key"] };
+  }
+
+  const authKey = input.publicKey.authKey().derivedAddress();
+
+  const originalAddress = await new Aptos(
+    options.aptosConfig,
+  ).lookupOriginalAccountAddress({ authenticationKey: authKey });
+
+  if (
+    !AccountAddress.from(parsedFields.data.address, {
+      maxMissingChars: 63,
+    }).equals(originalAddress)
+  ) {
+    return { valid: false, errors: ["invalid_auth_key"] };
+  }
 
   const errors: VerificationComparisonError[] = [];
 
-  if (input.address && input.address !== parsedFields.data.address)
+  if (expected.address && expected.address !== parsedFields.data.address)
     errors.push("message_address_mismatch");
-  if (input.statement !== parsedFields.data.statement)
+  if (expected.statement !== parsedFields.data.statement)
     errors.push("message_statement_mismatch");
-  if (input.uri && input.uri !== parsedFields.data.uri)
+  if (expected.uri && expected.uri !== parsedFields.data.uri)
     errors.push("message_uri_mismatch");
-  if (input.version && input.version !== parsedFields.data.version)
+  if (expected.version && expected.version !== parsedFields.data.version)
     errors.push("message_version_mismatch");
-  if (input.chainId && input.chainId !== parsedFields.data.chainId)
+  if (expected.chainId && expected.chainId !== parsedFields.data.chainId)
     errors.push("message_chain_id_mismatch");
-  if (input.nonce !== parsedFields.data.nonce)
+  if (expected.nonce !== parsedFields.data.nonce)
     errors.push("message_nonce_mismatch");
-  if (input.issuedAt !== parsedFields.data.issuedAt)
+  if (expected.issuedAt !== parsedFields.data.issuedAt)
     errors.push("message_issued_at_mismatch");
-  if (input.expirationTime !== parsedFields.data.expirationTime)
+  if (expected.expirationTime !== parsedFields.data.expirationTime)
     errors.push("message_expiration_time_mismatch");
-  if (input.notBefore !== parsedFields.data.notBefore)
+  if (expected.notBefore !== parsedFields.data.notBefore)
     errors.push("message_not_before_mismatch");
-  if (input.requestId !== parsedFields.data.requestId)
+  if (expected.requestId !== parsedFields.data.requestId)
     errors.push("message_request_id_mismatch");
 
   // If the domain is unexpectedly provided, it must be verified.
   if (
     // biome-ignore lint/suspicious/noExplicitAny: May be present in the input.
-    (input as any).domain &&
+    (expected as any).domain &&
     // biome-ignore lint/suspicious/noExplicitAny: May be present in the input.
-    (input as any).domain !== parsedFields.data.domain
+    (expected as any).domain !== parsedFields.data.domain
   )
     errors.push("message_domain_mismatch");
 
-  if (input.resources) {
+  if (expected.resources) {
     if (!parsedFields.data.resources) {
       errors.push("message_resources_missing");
     } else if (
       !arraysEqual(
-        input.resources,
+        expected.resources,
         parsedFields.data.resources,
         options?.excludedResources,
       )
@@ -203,32 +242,29 @@ export function verifySignInMessage(
 }
 
 /**
- * Verifies outputs from a `signIn` method response against input fields.
+ * Using the `publicKey` and `signature`, verify that the `signature` is valid for the `message`.
  *
- * @param input The input to verify the output against.
- * @param output The output to verify against the input.
+ * @param output The `AptosSignInOutput` to verify against the input.
  *
- * @returns The verification result.
+ * @returns The `AptosSignInInput` fields that are parsed from the message.
  */
-export async function verifySignIn(
-  input: AptosSignInInput & { domain: string },
-  output: { publicKey: PublicKey; signature: Signature; message: string },
+export async function verifySignInSignature(
+  output: {
+    publicKey: PublicKey;
+    signature: Signature;
+    message: string;
+  },
   options: { excludedResources?: string[]; aptosConfig: AptosConfig } = {
     aptosConfig: new AptosConfig({ network: Network.MAINNET }),
   },
 ): Promise<VerificationResult<AptosSignInInput & AptosSignInRequiredFields>> {
-  const messageVerification = verifySignInMessage(
-    input,
-    output.message,
-    options,
-  );
-  if (!messageVerification.valid) return messageVerification;
+  const parsedFields = parseSignInMessageText(output.message);
+  if (!parsedFields.valid) return parsedFields;
 
   const isSignatureValid = await verifySignature(output, options);
-
   if (!isSignatureValid) return { valid: false, errors: ["invalid_signature"] };
 
-  return { valid: true, data: messageVerification.data };
+  return { valid: true, data: parsedFields.data };
 }
 
 /**

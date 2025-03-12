@@ -30,38 +30,38 @@ export async function verifySignature(
     : generateSignInSigningMessage(output.message);
 
   // TODO: Remove this once the ts-sdk supports verifying Keyless signatures
-  if (AnyPublicKey.isInstance(output.publicKey)) {
-    if (output.publicKey.variant === AnyPublicKeyVariant.Keyless) {
-      try {
-        const body = {
-          public_key: output.publicKey.toStringWithoutPrefix(),
-          signature: output.signature.toStringWithoutPrefix(),
-          message: Hex.fromHexInput(signingMessage).toStringWithoutPrefix(),
-          address: output.publicKey.authKey().derivedAddress().toString(),
-        };
+  // if (AnyPublicKey.isInstance(output.publicKey)) {
+  //   if (output.publicKey.variant === AnyPublicKeyVariant.Keyless) {
+  //     try {
+  //       const body = {
+  //         public_key: output.publicKey.toStringWithoutPrefix(),
+  //         signature: output.signature.toStringWithoutPrefix(),
+  //         message: Hex.fromHexInput(signingMessage).toStringWithoutPrefix(),
+  //         address: output.publicKey.authKey().derivedAddress().toString(),
+  //       };
 
-        const { data } = await postAptosPepperService<
-          {
-            public_key: string;
-            signature: string;
-            message: string;
-            address: string;
-          },
-          { success: boolean }
-        >({
-          aptosConfig: options.aptosConfig,
-          path: "verify",
-          body,
-          originMethod: "verifySignature",
-          overrides: { WITH_CREDENTIALS: false },
-        });
-        return data.success;
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
-    }
-  }
+  //       const { data } = await postAptosPepperService<
+  //         {
+  //           public_key: string;
+  //           signature: string;
+  //           message: string;
+  //           address: string;
+  //         },
+  //         { success: boolean }
+  //       >({
+  //         aptosConfig: options.aptosConfig,
+  //         path: "verify",
+  //         body,
+  //         originMethod: "verifySignature",
+  //         overrides: { WITH_CREDENTIALS: false },
+  //       });
+  //       return data.success;
+  //     } catch (error) {
+  //       console.error(error);
+  //       return false;
+  //     }
+  //   }
+  // }
 
   return output.publicKey.verifySignature({
     message: signingMessage,

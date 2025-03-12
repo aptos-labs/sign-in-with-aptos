@@ -44,16 +44,20 @@ auth.post(
 
     const deserializedOutput = deserializeSignInOutput(output);
 
-    const verification = await verifySignIn(
-      {
-        ...(JSON.parse(input) as AptosSignInInput),
-        domain: FRONTEND_URL,
-      },
-      deserializedOutput
+    if (!signatureVerification.valid) {
+      return c.json(
+        { error: \`\${signatureVerification.errors.join(", ")}\` },
+        400,
+      );
+    }
+
+    const messageVerification = verifySignInMessage(
+      { ...(JSON.parse(input) as AptosSignInInput), domain: FRONTEND_URL },
+      deserializedOutput.message,
     );
 
-    if (!verification.valid) {
-      return c.json({ error: \`\${verification.errors.join(", ")}\` }, 400);
+    if (!messageVerification.valid) {
+      return c.json({ error: \`\${messageVerification.errors.join(", ")}\` }, 400);
     }
 
     // ... Generate and store a session for the user

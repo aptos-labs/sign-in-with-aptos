@@ -41,7 +41,13 @@ export default function WalletAdapterProvider({ children }: PropsWithChildren) {
 
   return (
     <AptosWalletAdapterProvider
-      onError={(error) => toast.error(error)}
+      onError={(error) => {
+        if (typeof error === "string") {
+          toast.error(error);
+        } else {
+          toast.error(error.message);
+        }
+      }}
       autoConnect={autoConnect}
     >
       {children}
