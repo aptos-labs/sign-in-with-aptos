@@ -1,8 +1,5 @@
 import { describe, expect, test } from "vitest";
-import {
-  createSignInMessageText,
-  parseSignInMessageText,
-} from "../../src/core.js";
+import { createSignInMessage, parseSignInMessage } from "../../src/core.js";
 import type { AptosSignInInput } from "@aptos-labs/wallet-standard";
 import type { AptosSignInRequiredFields } from "@aptos-labs/wallet-standard";
 
@@ -26,9 +23,9 @@ const extraFieldsInput = {
   resources: ["resource1", "resource2"],
 } satisfies AptosSignInInput & AptosSignInRequiredFields;
 
-describe("createSignInMessageText", () => {
+describe("createSignInMessage", () => {
   test("creates basic message with required fields", () => {
-    const message = createSignInMessageText(defaultFieldsInput);
+    const message = createSignInMessage(defaultFieldsInput);
     expect(message).toMatchInlineSnapshot(`
       "example.com wants you to sign in with your Aptos account:
       0x0000000000000000000000000000000000000000000000000000000000000001
@@ -41,7 +38,7 @@ describe("createSignInMessageText", () => {
   });
 
   test("creates message with all fields", () => {
-    const message = createSignInMessageText(extraFieldsInput);
+    const message = createSignInMessage(extraFieldsInput);
     expect(message).toMatchInlineSnapshot(`
       "example.com wants you to sign in with your Aptos account:
       0x0000000000000000000000000000000000000000000000000000000000000001
@@ -63,10 +60,10 @@ describe("createSignInMessageText", () => {
   });
 });
 
-describe("parseSignInMessageText", () => {
+describe("parseSignInMessage", () => {
   test("successfully parses small message", () => {
-    const message = createSignInMessageText(defaultFieldsInput);
-    const result = parseSignInMessageText(message);
+    const message = createSignInMessage(defaultFieldsInput);
+    const result = parseSignInMessage(message);
     expect(result).toMatchInlineSnapshot(`
       {
         "data": {
@@ -89,8 +86,8 @@ describe("parseSignInMessageText", () => {
   });
 
   test("successfully parses large message", () => {
-    const message = createSignInMessageText(extraFieldsInput);
-    const result = parseSignInMessageText(message);
+    const message = createSignInMessage(extraFieldsInput);
+    const result = parseSignInMessage(message);
     expect(result).toMatchInlineSnapshot(`
       {
         "data": {
@@ -117,7 +114,7 @@ describe("parseSignInMessageText", () => {
 
   test("fails invalid message format", () => {
     const message = "Invalid message format";
-    const result = parseSignInMessageText(message);
+    const result = parseSignInMessage(message);
     expect(result.valid).toBe(false);
     if (!result.valid) expect(result.errors).toEqual(["invalid_message"]);
     expect(result).toMatchInlineSnapshot(`
@@ -131,48 +128,48 @@ describe("parseSignInMessageText", () => {
   });
 
   test("fails when domain is missing", () => {
-    const message = createSignInMessageText({
+    const message = createSignInMessage({
       ...defaultFieldsInput,
       domain: undefined,
       // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
-    const result = parseSignInMessageText(message);
+    const result = parseSignInMessage(message);
     expect(result.valid).toBe(false);
     if (!result.valid)
       expect(result.errors).toEqual(["message_domain_missing"]);
   });
 
   test("fails when address is missing", () => {
-    const message = createSignInMessageText({
+    const message = createSignInMessage({
       ...defaultFieldsInput,
       address: undefined,
       // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
-    const result = parseSignInMessageText(message);
+    const result = parseSignInMessage(message);
     expect(result.valid).toBe(false);
     if (!result.valid)
       expect(result.errors).toEqual(["message_address_missing"]);
   });
 
   test("fails when version is missing", () => {
-    const message = createSignInMessageText({
+    const message = createSignInMessage({
       ...defaultFieldsInput,
       version: undefined,
       // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
-    const result = parseSignInMessageText(message);
+    const result = parseSignInMessage(message);
     expect(result.valid).toBe(false);
     if (!result.valid)
       expect(result.errors).toEqual(["message_version_missing"]);
   });
 
   test("fails when chainId is missing", () => {
-    const message = createSignInMessageText({
+    const message = createSignInMessage({
       ...defaultFieldsInput,
       chainId: undefined,
       // biome-ignore lint/suspicious/noExplicitAny: Explicitly breaking type safety
     } as any);
-    const result = parseSignInMessageText(message);
+    const result = parseSignInMessage(message);
     expect(result.valid).toBe(false);
     if (!result.valid)
       expect(result.errors).toEqual(["message_chain_id_missing"]);

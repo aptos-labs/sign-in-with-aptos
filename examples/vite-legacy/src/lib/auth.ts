@@ -18,10 +18,7 @@ export const fetchSignInInputLegacy = async (address: string) => {
 };
 
 export const loginWithSignInOutputLegacy = async (
-  output: Pick<
-    AptosSignInOutput,
-    "type" | "signature" | "plainText" | "account"
-  >,
+  output: Pick<AptosSignInOutput, "type" | "signature" | "input" | "account">,
 ) => {
   const response = await fetch(`${BACKEND_URL}/auth/siwa/legacy/callback`, {
     credentials: "include",

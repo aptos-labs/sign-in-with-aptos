@@ -11,6 +11,7 @@ import { z } from "zod";
 import { generateSessionToken, createSession } from "../lib/sessions.js";
 import { getUserByAddress, createUserByAddress } from "../lib/users.js";
 import { verifyLegacySignIn } from "@aptos-labs/siwa/legacy";
+import { deserializeLegacySignInOutput } from "@aptos-labs/siwa/legacy";
 
 const legacyAuth = new Hono();
 
@@ -61,7 +62,7 @@ legacyAuth.post(
     const input = getCookie(c, "siwa-input");
     if (!input) return c.json({ error: "input_not_found" }, 400);
 
-    const deserializedOutput = deserializeSignInOutput(output);
+    const deserializedOutput = deserializeLegacySignInOutput(output);
 
     const verification = await verifyLegacySignIn(
       JSON.parse(input) as AptosSignInInput & AptosSignInRequiredFields,

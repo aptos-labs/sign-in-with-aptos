@@ -1,3 +1,7 @@
+import { AptosConfig, Network } from "@aptos-labs/ts-sdk";
+
+import { Aptos } from "@aptos-labs/ts-sdk";
+
 /**
  * @internal
  *
@@ -77,3 +81,5 @@ export function encodeBase64(bytes: Uint8Array): string {
   }
   return result;
 }
+
+export const mainnet = new Aptos(new AptosConfig({ network: Network.MAINNET }));

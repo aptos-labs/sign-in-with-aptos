@@ -1,10 +1,8 @@
 import {
   AccountAddress,
   AccountPublicKey,
-  Aptos,
-  AptosConfig,
+  type Aptos,
   Hex,
-  Network,
   type PublicKey,
   type Signature,
 } from "@aptos-labs/ts-sdk";
@@ -13,9 +11,10 @@ import type {
   AptosSignInRequiredFields,
 } from "@aptos-labs/wallet-standard";
 import { sha3_256 } from "@noble/hashes/sha3";
-import { createSignInMessageText } from "./core.js";
-import type { VerificationError } from "./types.js";
-import { verifySignature } from "./signatures.js";
+import { createSignInMessage } from "../core.js";
+import type { VerificationError } from "../types.js";
+import { verifySignature } from "../signatures.js";
+import { mainnet } from "../internal.js";
 
 export type VerificationFullMessageError = "invalid_full_message";
 
@@ -28,7 +27,7 @@ export type LegacyVerificationResult<T> =
 export const createLegacySignInMessage = (
   input: AptosSignInInput & AptosSignInRequiredFields,
 ) => {
-  let message = createSignInMessageText(input);
+  let message = createSignInMessage(input);
   message += `\n\nHash: ${Hex.fromHexInput(sha3_256(message)).toString()}`;
   return message;
 };
@@ -40,9 +39,7 @@ export const verifyLegacySignIn = async (
     signature: Signature;
     message: string;
   },
-  options: { aptosConfig: AptosConfig } = {
-    aptosConfig: new AptosConfig({ network: Network.MAINNET }),
-  },
+  options: { aptos?: Aptos } = {},
 ): Promise<
   LegacyVerificationResult<AptosSignInInput & AptosSignInRequiredFields>
 > => {
@@ -58,8 +55,8 @@ export const verifyLegacySignIn = async (
 
   const authKey = output.publicKey.authKey().derivedAddress();
 
-  const originalAddress = await new Aptos(
-    options.aptosConfig,
+  const originalAddress = await (
+    options.aptos ?? mainnet
   ).lookupOriginalAccountAddress({ authenticationKey: authKey });
 
   if (
@@ -70,10 +67,14 @@ export const verifyLegacySignIn = async (
     return { valid: false, errors: ["invalid_auth_key"] };
   }
 
-  const isSignatureValid = await verifySignature(output, {
-    aptosConfig: options.aptosConfig,
-    isSigningMessage: true,
-  });
+  const isSignatureValid = await verifySignature(
+    {
+      publicKey: output.publicKey,
+      signature: output.signature,
+      signingMessage: output.message,
+    },
+    { aptos: options.aptos },
+  );
 
   if (!isSignatureValid) return { valid: false, errors: ["invalid_signature"] };
 
