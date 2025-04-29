@@ -114,12 +114,15 @@
     100% {
       border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
     }
+
     25% {
       border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
     }
+
     50% {
       border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
     }
+
     75% {
       border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
     }
@@ -131,10 +134,12 @@
       top: 0;
       right: 0;
     }
+
     50% {
       top: 50%;
       right: 25%;
     }
+
     75% {
       top: 25%;
       right: 50%;
@@ -147,10 +152,12 @@
       top: 0;
       left: 0;
     }
+
     60% {
       top: 75%;
       left: 25%;
     }
+
     85% {
       top: 50%;
       left: 50%;
@@ -163,10 +170,12 @@
       bottom: 0;
       left: 0;
     }
+
     40% {
       bottom: 50%;
       left: 25%;
     }
+
     65% {
       bottom: 25%;
       left: 50%;
@@ -179,10 +188,12 @@
       bottom: 0;
       right: 0;
     }
+
     50% {
       bottom: 25%;
       right: 40%;
     }
+
     90% {
       bottom: 50%;
       right: 25%;
@@ -218,4 +229,22 @@ html.dark .shiki span {
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+body {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 300px
+    ),
+    fixed 0 0 / 20px 20px radial-gradient(#dcdcdc 1px, transparent 0),
+    fixed 10px 10px / 20px 20px radial-gradient(#dcdcdc 1px, transparent 0);
+}
+
+.dark body {
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #111 300px),
+    fixed 0 0 / 20px 20px radial-gradient(#313131 1px, transparent 0),
+    fixed 10px 10px / 20px 20px radial-gradient(#313131 1px, transparent 0);
 }

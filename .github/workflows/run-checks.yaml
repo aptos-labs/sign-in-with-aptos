@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+env:
+  APTOS_MAINNET_API_KEY: ${{ secrets.APTOS_MAINNET_API_KEY }}
+
 jobs:
   run-package-checks:
     name: Run Checks on @aptos-labs/siwa
@@ -14,10 +17,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Setup pnpm 10.6.4
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.6.4
 
       - name: Setup Node.js 22.x
         uses: actions/setup-node@v4

@@ -1,7 +1,6 @@
 import {
   type AptosSignInInput,
-  type AptosSignInRequiredFields,
-  deserializeSignInOutput,
+  type AptosSignInBoundFields,
   generateNonce,
 } from "@aptos-labs/siwa";
 import { zValidator } from "@hono/zod-validator";
@@ -11,6 +10,7 @@ import { z } from "zod";
 import { generateSessionToken, createSession } from "../lib/sessions.js";
 import { getUserByAddress, createUserByAddress } from "../lib/users.js";
 import { verifyLegacySignIn } from "@aptos-labs/siwa/legacy";
+import { deserializeLegacySignInOutput } from "@aptos-labs/siwa/legacy";
 
 const legacyAuth = new Hono();
 
@@ -30,7 +30,7 @@ legacyAuth.get(
       uri: "https://localhost:5173",
       version: "1",
       chainId: "aptos:mainnet",
-    } satisfies AptosSignInInput & AptosSignInRequiredFields;
+    } satisfies AptosSignInInput & AptosSignInBoundFields;
 
     setCookie(c, "siwa-input", JSON.stringify(input), {
       httpOnly: true,
@@ -61,10 +61,10 @@ legacyAuth.post(
     const input = getCookie(c, "siwa-input");
     if (!input) return c.json({ error: "input_not_found" }, 400);
 
-    const deserializedOutput = deserializeSignInOutput(output);
+    const deserializedOutput = deserializeLegacySignInOutput(output);
 
     const verification = await verifyLegacySignIn(
-      JSON.parse(input) as AptosSignInInput & AptosSignInRequiredFields,
+      JSON.parse(input) as AptosSignInInput & AptosSignInBoundFields,
       deserializedOutput,
     );
 

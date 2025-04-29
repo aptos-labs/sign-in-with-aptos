@@ -1,13 +1,5 @@
-import {
-  AnyPublicKey,
-  AnyPublicKeyVariant,
-  Hex,
-  postAptosPepperService,
-  type AptosConfig,
-  type PublicKey,
-  type Signature,
-} from "@aptos-labs/ts-sdk";
-import { generateSignInSigningMessage } from "./core.js";
+import type { Aptos, HexInput, PublicKey, Signature } from "@aptos-labs/ts-sdk";
+import { mainnet } from "./internal.js";
 
 /**
  * Verifies a signature using the Sign in with Aptos signing algorithm.
@@ -18,53 +10,16 @@ import { generateSignInSigningMessage } from "./core.js";
  * @returns The verification result.
  */
 export async function verifySignature(
-  output: {
+  params: {
     publicKey: PublicKey;
     signature: Signature;
-    message: string;
+    signingMessage: HexInput;
   },
-  options: { aptosConfig: AptosConfig; isSigningMessage?: boolean },
+  options: { aptos?: Aptos } = {},
 ): Promise<boolean> {
-  const signingMessage = options.isSigningMessage
-    ? output.message
-    : generateSignInSigningMessage(output.message);
-
-  // TODO: Remove this once the ts-sdk supports verifying Keyless signatures
-  // if (AnyPublicKey.isInstance(output.publicKey)) {
-  //   if (output.publicKey.variant === AnyPublicKeyVariant.Keyless) {
-  //     try {
-  //       const body = {
-  //         public_key: output.publicKey.toStringWithoutPrefix(),
-  //         signature: output.signature.toStringWithoutPrefix(),
-  //         message: Hex.fromHexInput(signingMessage).toStringWithoutPrefix(),
-  //         address: output.publicKey.authKey().derivedAddress().toString(),
-  //       };
-
-  //       const { data } = await postAptosPepperService<
-  //         {
-  //           public_key: string;
-  //           signature: string;
-  //           message: string;
-  //           address: string;
-  //         },
-  //         { success: boolean }
-  //       >({
-  //         aptosConfig: options.aptosConfig,
-  //         path: "verify",
-  //         body,
-  //         originMethod: "verifySignature",
-  //         overrides: { WITH_CREDENTIALS: false },
-  //       });
-  //       return data.success;
-  //     } catch (error) {
-  //       console.error(error);
-  //       return false;
-  //     }
-  //   }
-  // }
-
-  return output.publicKey.verifySignature({
-    message: signingMessage,
-    signature: output.signature,
+  return params.publicKey.verifySignatureAsync({
+    aptosConfig: options.aptos?.config ?? mainnet.config,
+    message: params.signingMessage,
+    signature: params.signature,
   });
 }

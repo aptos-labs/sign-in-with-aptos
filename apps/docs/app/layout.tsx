@@ -17,6 +17,7 @@ import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style.css";
 import AppProviders from "@/context/AppProviders";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://siwa.aptos.dev"),
@@ -91,7 +92,7 @@ export default async function RootLayout({
                 projectLink="https://github.com/aptos-labs/sign-in-with-aptos"
                 logo={
                   <div className="gap-2 flex items-center">
-                    <img
+                    <Image
                       src="./navicon.svg"
                       alt="Aptos Logo"
                       style={{
@@ -99,6 +100,8 @@ export default async function RootLayout({
                         height: "24px",
                         width: "24px",
                       }}
+                      width={24}
+                      height={24}
                     />
                     <span className="text-xl leading-tighter font-landing">
                       SIWA

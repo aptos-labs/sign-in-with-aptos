@@ -21,7 +21,7 @@ describe("deserializeSignInPublicKey", () => {
   test("should deserialize a Ed25519PublicKey using string", () => {
     const publicKey = new Ed25519PublicKey(new Uint8Array(32));
     expect(
-      deserializeSignInPublicKey("ed25519", publicKey.bcsToBytes())
+      deserializeSignInPublicKey("ed25519", publicKey.bcsToBytes()),
     ).toStrictEqual(publicKey);
   });
 
@@ -34,16 +34,16 @@ describe("deserializeSignInPublicKey", () => {
       threshold: 1,
     });
     expect(
-      deserializeSignInPublicKey("multi_ed25519", publicKey.bcsToBytes())
+      deserializeSignInPublicKey("multi_ed25519", publicKey.bcsToBytes()),
     ).toStrictEqual(publicKey);
   });
 
   test("should deserialize a SingleKey using string", () => {
     const publicKey = new AnyPublicKey(
-      new Ed25519PublicKey(new Uint8Array(32))
+      new Ed25519PublicKey(new Uint8Array(32)),
     );
     expect(
-      deserializeSignInPublicKey("single_key", publicKey.bcsToBytes())
+      deserializeSignInPublicKey("single_key", publicKey.bcsToBytes()),
     ).toStrictEqual(publicKey);
   });
 
@@ -56,14 +56,14 @@ describe("deserializeSignInPublicKey", () => {
       signaturesRequired: 1,
     });
     expect(
-      deserializeSignInPublicKey("multi_key", publicKey.bcsToBytes())
+      deserializeSignInPublicKey("multi_key", publicKey.bcsToBytes()),
     ).toStrictEqual(publicKey);
   });
 
   test("should deserialize a Ed25519PublicKey using SigningScheme", () => {
     const publicKey = new Ed25519PublicKey(new Uint8Array(32));
     expect(
-      deserializeSignInPublicKey(SigningScheme.Ed25519, publicKey.bcsToBytes())
+      deserializeSignInPublicKey(SigningScheme.Ed25519, publicKey.bcsToBytes()),
     ).toStrictEqual(publicKey);
   });
 
@@ -78,20 +78,20 @@ describe("deserializeSignInPublicKey", () => {
     expect(
       deserializeSignInPublicKey(
         SigningScheme.MultiEd25519,
-        publicKey.bcsToBytes()
-      )
+        publicKey.bcsToBytes(),
+      ),
     ).toStrictEqual(publicKey);
   });
 
   test("should deserialize a SingleKey using SigningScheme", () => {
     const publicKey = new AnyPublicKey(
-      new Ed25519PublicKey(new Uint8Array(32))
+      new Ed25519PublicKey(new Uint8Array(32)),
     );
     expect(
       deserializeSignInPublicKey(
         SigningScheme.SingleKey,
-        publicKey.bcsToBytes()
-      )
+        publicKey.bcsToBytes(),
+      ),
     ).toStrictEqual(publicKey);
   });
 
@@ -104,16 +104,19 @@ describe("deserializeSignInPublicKey", () => {
       signaturesRequired: 1,
     });
     expect(
-      deserializeSignInPublicKey(SigningScheme.MultiKey, publicKey.bcsToBytes())
+      deserializeSignInPublicKey(
+        SigningScheme.MultiKey,
+        publicKey.bcsToBytes(),
+      ),
     ).toStrictEqual(publicKey);
   });
 
   test("throw error if the public key scheme string is not valid", () => {
     expect(() =>
-      deserializeSignInPublicKey("invalid" as "ed25519", new Uint8Array(64))
+      deserializeSignInPublicKey("invalid" as "ed25519", new Uint8Array(64)),
     ).toThrow();
     expect(() =>
-      deserializeSignInPublicKey(100 as SigningScheme, new Uint8Array(64))
+      deserializeSignInPublicKey(100 as SigningScheme, new Uint8Array(64)),
     ).toThrow();
   });
 });
@@ -122,7 +125,7 @@ describe("serializeSignInPublicKey", () => {
   test("should serialize a Ed25519PublicKey using string", () => {
     const signature = new Ed25519Signature(new Uint8Array(64));
     expect(
-      deserializeSignInSignature("ed25519", signature.bcsToBytes())
+      deserializeSignInSignature("ed25519", signature.bcsToBytes()),
     ).toStrictEqual(signature);
   });
 
@@ -132,16 +135,16 @@ describe("serializeSignInPublicKey", () => {
       bitmap: [0],
     });
     expect(
-      deserializeSignInSignature("multi_ed25519", signature.bcsToBytes())
+      deserializeSignInSignature("multi_ed25519", signature.bcsToBytes()),
     ).toStrictEqual(signature);
   });
 
   test("should serialize a SingleKey using string", () => {
     const signature = new AnySignature(
-      new Ed25519Signature(new Uint8Array(64))
+      new Ed25519Signature(new Uint8Array(64)),
     );
     expect(
-      deserializeSignInSignature("single_key", signature.bcsToBytes())
+      deserializeSignInSignature("single_key", signature.bcsToBytes()),
     ).toStrictEqual(signature);
   });
 
@@ -151,14 +154,14 @@ describe("serializeSignInPublicKey", () => {
       bitmap: [0],
     });
     expect(
-      deserializeSignInSignature("multi_key", signature.bcsToBytes())
+      deserializeSignInSignature("multi_key", signature.bcsToBytes()),
     ).toStrictEqual(signature);
   });
 
   test("should serialize a Ed25519Signature using SigningScheme", () => {
     const signature = new Ed25519Signature(new Uint8Array(64));
     expect(
-      deserializeSignInSignature(SigningScheme.Ed25519, signature.bcsToBytes())
+      deserializeSignInSignature(SigningScheme.Ed25519, signature.bcsToBytes()),
     ).toStrictEqual(signature);
   });
 
@@ -170,20 +173,20 @@ describe("serializeSignInPublicKey", () => {
     expect(
       deserializeSignInSignature(
         SigningScheme.MultiEd25519,
-        signature.bcsToBytes()
-      )
+        signature.bcsToBytes(),
+      ),
     ).toStrictEqual(signature);
   });
 
   test("should serialize a SingleKey using SigningScheme", () => {
     const signature = new AnySignature(
-      new Ed25519Signature(new Uint8Array(64))
+      new Ed25519Signature(new Uint8Array(64)),
     );
     expect(
       deserializeSignInSignature(
         SigningScheme.SingleKey,
-        signature.bcsToBytes()
-      )
+        signature.bcsToBytes(),
+      ),
     ).toStrictEqual(signature);
   });
 
@@ -193,16 +196,19 @@ describe("serializeSignInPublicKey", () => {
       bitmap: [0],
     });
     expect(
-      deserializeSignInSignature(SigningScheme.MultiKey, signature.bcsToBytes())
+      deserializeSignInSignature(
+        SigningScheme.MultiKey,
+        signature.bcsToBytes(),
+      ),
     ).toStrictEqual(signature);
   });
 
   test("throw error if the signature scheme string is not valid", () => {
     expect(() =>
-      deserializeSignInSignature("invalid" as "ed25519", new Uint8Array(64))
+      deserializeSignInSignature("invalid" as "ed25519", new Uint8Array(64)),
     ).toThrow();
     expect(() =>
-      deserializeSignInSignature(100 as SigningScheme, new Uint8Array(64))
+      deserializeSignInSignature(100 as SigningScheme, new Uint8Array(64)),
     ).toThrow();
   });
 });

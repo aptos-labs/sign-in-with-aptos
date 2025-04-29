@@ -1,9 +1,11 @@
 import { BACKEND_URL } from "@/lib/utils";
-import { serializeSignInOutput } from "@aptos-labs/siwa";
+import {
+  serializeSignInOutput,
+  type AptosSignInBoundFields,
+} from "@aptos-labs/siwa";
 import type {
   AptosSignInInput,
   AptosSignInOutput,
-  AptosSignInRequiredFields,
 } from "@aptos-labs/wallet-adapter-react";
 
 export const fetchSignInInputLegacy = async (address: string) => {
@@ -13,15 +15,12 @@ export const fetchSignInInputLegacy = async (address: string) => {
   );
   if (!response.ok) throw new Error("Failed to fetch sign in input");
   return (await response.json()) as {
-    data: AptosSignInInput & AptosSignInRequiredFields;
+    data: AptosSignInInput & AptosSignInBoundFields;
   };
 };
 
 export const loginWithSignInOutputLegacy = async (
-  output: Pick<
-    AptosSignInOutput,
-    "type" | "signature" | "plainText" | "account"
-  >,
+  output: Pick<AptosSignInOutput, "type" | "signature" | "input" | "account">,
 ) => {
   const response = await fetch(`${BACKEND_URL}/auth/siwa/legacy/callback`, {
     credentials: "include",

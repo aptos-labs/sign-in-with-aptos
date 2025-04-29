@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: Allowed */
 import { describe, expect, test } from "vitest";
 import { getSignInPublicKeyScheme } from "../../src/utils.js";
 import {

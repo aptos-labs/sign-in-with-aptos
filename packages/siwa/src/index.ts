@@ -1,3 +1,5 @@
+import type { AptosSignInBoundFields } from "@aptos-labs/wallet-standard";
+
 export * from "./core.js";
 export {
   VerificationResult,
@@ -11,5 +13,10 @@ export * from "./serializers.js";
 export type {
   AptosSignInInput,
   AptosSignInOutput,
-  AptosSignInRequiredFields,
+  AptosSignInBoundFields,
 } from "@aptos-labs/wallet-standard";
+
+/**
+ * @deprecated Use `AptosSignInBoundFields` instead.
+ */
+export type AptosSignInRequiredFields = AptosSignInBoundFields;

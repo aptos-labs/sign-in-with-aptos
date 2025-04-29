@@ -1,4 +1,13 @@
-export type VerificationResult<T> =
+export type VerificationResult =
+  | {
+      valid: true;
+    }
+  | {
+      valid: false;
+      errors: VerificationError[];
+    };
+
+export type VerificationResultWithData<T> =
   | {
       valid: true;
       data: T;
@@ -40,4 +49,6 @@ export type VerificationMessageError =
   | "message_address_missing"
   | "message_statement_missing"
   | "message_version_missing"
-  | "message_chain_id_missing";
+  | "message_chain_id_missing"
+  | "message_expired"
+  | "message_not_yet_valid";

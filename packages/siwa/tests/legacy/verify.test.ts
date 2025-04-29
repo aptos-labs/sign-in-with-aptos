@@ -1,13 +1,18 @@
-import { Ed25519Signature } from "@aptos-labs/ts-sdk";
+/** biome-ignore-all lint/suspicious/noExplicitAny: Allowed */
+import {
+  Ed25519Account,
+  Ed25519Signature,
+  type PublicKey,
+} from "@aptos-labs/ts-sdk";
 import type {
   AptosSignInInput,
-  AptosSignInRequiredFields,
+  AptosSignInBoundFields,
 } from "@aptos-labs/wallet-standard";
 import { describe, expect, test } from "vitest";
 import {
   createLegacySignInMessage,
   verifyLegacySignIn,
-} from "../../src/legacy.js";
+} from "../../src/legacy/index.js";
 import { ed25519Account } from "../lib/constants.js";
 import { createLegacyFullMessage } from "../lib/helpers.js";
 
@@ -18,7 +23,7 @@ const defaultFieldsInput = {
   version: "1",
   chainId: "aptos:mainnet",
   nonce: "abc123",
-} satisfies AptosSignInInput & AptosSignInRequiredFields;
+} satisfies AptosSignInInput & AptosSignInBoundFields;
 
 describe("verifySignInSignature", () => {
   const publicKey = ed25519Account.publicKey;
@@ -97,5 +102,39 @@ describe("verifySignInSignature", () => {
     });
 
     expect(result.valid).toBe(false);
+  });
+
+  test("fails when public key is invalid", async () => {
+    const fullMessage = createLegacyFullMessage({
+      message: createLegacySignInMessage({
+        ...defaultFieldsInput,
+      }),
+    });
+
+    const result = await verifyLegacySignIn(defaultFieldsInput, {
+      publicKey: {} as PublicKey,
+      signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
+      message: fullMessage,
+    });
+
+    expect(result.valid).toBe(false);
+  });
+
+  test("fails when public key's auth key does not match message address", async () => {
+    const account = Ed25519Account.generate();
+
+    const fullMessage = createLegacyFullMessage({
+      message: createLegacySignInMessage({
+        ...defaultFieldsInput,
+      }),
+    });
+
+    const result = await verifyLegacySignIn(defaultFieldsInput, {
+      publicKey: account.publicKey,
+      signature: ed25519Account.sign(new TextEncoder().encode(fullMessage)),
+      message: fullMessage,
+    });
+    expect(result.valid).toBe(false);
+    if (!result.valid) expect(result.errors).toEqual(["invalid_auth_key"]);
   });
 });

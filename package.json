@@ -1,6 +1,7 @@
 {
   "name": "@aptos-labs/sign-in-with-aptos",
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -16,18 +17,26 @@
     "vite-legacy-example": "turbo dev --filter=@aptos-labs/siwa-vite-legacy --filter=@aptos-labs/siwa-backend --ui tui"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@changesets/cli": "^2.28.1",
-    "@types/node": "22.13.4",
-    "@vitest/coverage-v8": "^3.0.8",
-    "turbo": "^2.4.4",
-    "vitest": "^3.0.8"
+    "@biomejs/biome": "2.0.0-beta.5",
+    "@changesets/cli": "^2.29.2",
+    "@types/node": "22.15.3",
+    "@vitest/coverage-v8": "^3.1.2",
+    "turbo": "^2.5.2",
+    "vitest": "^3.1.2"
   },
-  "packageManager": "pnpm@10.6.4",
+  "packageManager": "pnpm@10.9.0",
   "engines": {
-    "node": ">=22.14.0"
+    "node": ">=22.15.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["better-sqlite3", "@swc/core", "esbuild"]
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "better-sqlite3",
+      "bufferutil",
+      "cytoscape",
+      "esbuild",
+      "sharp",
+      "utf-8-validate"
+    ]
   }
 }

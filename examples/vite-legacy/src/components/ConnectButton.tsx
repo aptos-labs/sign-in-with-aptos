@@ -38,7 +38,7 @@ export default function ConnectButton({ ...props }: ConnectButtonProps) {
       try {
         await loginWithSignInOutputLegacy({
           account: account,
-          plainText: output.fullMessage,
+          input: input.data,
           signature: output.signature,
           type: getSignInPublicKeyScheme(account.publicKey),
         });

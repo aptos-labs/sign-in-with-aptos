@@ -26,10 +26,8 @@ jobs:
           app-id: ${{ vars.APTOS_LABS_BOT_APP_ID }}
           private-key: ${{ secrets.APTOS_LABS_BOT_APP_PRIVATE_KEY }}
 
-      - name: Setup pnpm 10.6.4
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.6.4
 
       - name: Setup Node.js 22.x
         uses: actions/setup-node@v4

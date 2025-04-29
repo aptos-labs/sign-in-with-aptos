@@ -15,7 +15,7 @@ export async function fetchUser() {
     });
     if (!response.ok) throw new Error("Failed to fetch user");
     return ((await response.json()) as GetUserResponse).data;
-  } catch (error) {
+  } catch (_) {
     return null;
   }
 }

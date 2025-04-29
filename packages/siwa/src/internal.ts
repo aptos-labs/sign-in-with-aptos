@@ -1,3 +1,7 @@
+import { AptosConfig, Network } from "@aptos-labs/ts-sdk";
+
+import { Aptos } from "@aptos-labs/ts-sdk";
+
 /**
  * @internal
  *
@@ -77,3 +81,16 @@ export function encodeBase64(bytes: Uint8Array): string {
   }
   return result;
 }
+
+export async function asyncTryOrDefault<T>(
+  fn: () => Promise<T>,
+  defaultValue: T,
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (_) {
+    return defaultValue;
+  }
+}
+
+export const mainnet = new Aptos(new AptosConfig({ network: Network.MAINNET }));
