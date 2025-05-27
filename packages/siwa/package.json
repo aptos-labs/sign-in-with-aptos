@@ -1,6 +1,6 @@
 {
 	"name": "@aptos-labs/siwa",
-	"version": "0.2.5",
+	"version": "0.3.0",
 	"description": "Library of utilities for Sign in with Aptos",
 	"repository": {
 		"type": "git",
