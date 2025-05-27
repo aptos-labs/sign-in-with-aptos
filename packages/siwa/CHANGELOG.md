@@ -1,5 +1,16 @@
 # @aptos-labs/siwa
 
+## 0.3.0
+
+### Minor Changes
+
+- cf1ffa3: Separated out signature verification with input validation
+- da9fc9d: Bump @aptos-labs/wallet-standard to 0.5.0
+
+### Patch Changes
+
+- cf1ffa3: Add verification step to compare the `PublicKey`'s derived address to the message address
+
 ## 0.2.5
 
 ### Patch Changes
