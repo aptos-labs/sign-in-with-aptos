@@ -17,20 +17,21 @@
     "vite-legacy-example": "turbo dev --filter=@aptos-labs/siwa-vite-legacy --filter=@aptos-labs/siwa-backend --ui tui"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.0-beta.5",
-    "@changesets/cli": "^2.29.2",
+    "@biomejs/biome": "^2.0.6",
+    "@changesets/cli": "^2.29.5",
     "@types/node": "22.15.3",
-    "@vitest/coverage-v8": "^3.1.2",
-    "turbo": "^2.5.2",
-    "vitest": "^3.1.2"
+    "@vitest/coverage-v8": "^3.2.4",
+    "turbo": "^2.5.4",
+    "vitest": "^3.2.4"
   },
-  "packageManager": "pnpm@10.9.0",
+  "packageManager": "pnpm@10.12.3",
   "engines": {
     "node": ">=22.15.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",
+      "@tailwindcss/oxide",
       "better-sqlite3",
       "bufferutil",
       "cytoscape",
