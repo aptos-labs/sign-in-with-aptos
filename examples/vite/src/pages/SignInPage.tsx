@@ -107,7 +107,7 @@ export default function SignInPage() {
           </form>
         ) : (
           <div className="flex mt-8 items-center justify-center">
-            <ConnectButton />
+            <ConnectButton walletName="Continue with Google" />
           </div>
         )}
       </CardContent>

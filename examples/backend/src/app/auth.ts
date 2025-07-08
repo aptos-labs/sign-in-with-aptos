@@ -1,4 +1,5 @@
 import {
+  type AptosSignInBoundFields,
   type AptosSignInInput,
   deserializeSignInOutput,
   generateNonce,
@@ -18,6 +19,7 @@ auth.get("/auth/siwa", (c) => {
   const nonce = generateNonce();
   const input = {
     nonce,
+    domain: "localhost:5173",
     statement: "Sign into to get access to this demo application",
   } satisfies AptosSignInInput;
 
@@ -35,11 +37,19 @@ auth.post(
     "json",
     z.object({
       output: z.object({
-        version: z.enum(["1"]),
+        version: z.enum(["2"]),
         type: z.enum(["ed25519", "multi_ed25519", "single_key", "multi_key"]),
         signature: z.string(),
-        message: z.string(),
         publicKey: z.string(),
+        input: z.object({
+          address: z.string(),
+          nonce: z.string(),
+          domain: z.string(),
+          uri: z.string(),
+          statement: z.string(),
+          version: z.string(),
+          chainId: z.string(),
+        }),
       }),
     }),
   ),
@@ -51,6 +61,10 @@ auth.post(
 
     const deserializedOutput = deserializeSignInOutput(output);
 
+    if (deserializedOutput.version === "1") {
+      return c.json({ error: "invalid_output" }, 400);
+    }
+
     const signatureVerification =
       await verifySignInSignature(deserializedOutput);
 
@@ -61,22 +75,23 @@ auth.post(
       );
     }
 
-    const messageVerification = verifySignInMessage(
-      { ...(JSON.parse(input) as AptosSignInInput), domain: "localhost:5173" },
-      deserializedOutput.message,
-    );
+    const messageVerification = await verifySignInMessage({
+      input: deserializedOutput.input,
+      expected: JSON.parse(input) as AptosSignInInput & AptosSignInBoundFields,
+      publicKey: deserializedOutput.publicKey,
+    });
 
     if (!messageVerification.valid) {
       return c.json({ error: `${messageVerification.errors.join(", ")}` }, 400);
     }
 
-    let user = await getUserByAddress(messageVerification.data.address);
+    let user = await getUserByAddress(deserializedOutput.input.address);
     if (!user) {
-      user = await createUserByAddress(messageVerification.data.address);
+      user = await createUserByAddress(deserializedOutput.input.address);
     }
 
     const token = generateSessionToken();
-    await createSession(token, messageVerification.data.address);
+    await createSession(token, deserializedOutput.input.address);
 
     setCookie(c, "session", token, {
       httpOnly: true,
@@ -91,6 +106,7 @@ auth.get("/auth/siwa/error", (c) => {
   const nonce = generateNonce();
   const input = {
     nonce,
+    domain: "localhost:5173",
     uri: "https://instagram.com/",
     statement: "Sign into to get access to this demo application",
   } satisfies AptosSignInInput;
