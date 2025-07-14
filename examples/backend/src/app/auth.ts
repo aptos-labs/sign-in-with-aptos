@@ -61,10 +61,6 @@ auth.post(
 
     const deserializedOutput = deserializeSignInOutput(output);
 
-    if (deserializedOutput.version === "1") {
-      return c.json({ error: "invalid_output" }, 400);
-    }
-
     const signatureVerification =
       await verifySignInSignature(deserializedOutput);
 

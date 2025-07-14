@@ -12,39 +12,23 @@ import {
 
 export const CURRENT_SERIALIZATION_VERSION = "2";
 
-export type SerializationVersion = "1" | "2";
+export type SerializationVersion = "2";
 
-export type SerializedAptosSignInOutput =
-  | {
-      version: "1";
-      type: string;
-      signature: string;
-      message: string;
-      publicKey: string;
-    }
-  | {
-      version: "2";
-      type: string;
-      signature: string;
-      input: AptosSignInInput & AptosSignInBoundFields;
-      publicKey: string;
-    };
+export type SerializedAptosSignInOutput = {
+  version: "2";
+  type: string;
+  signature: string;
+  input: AptosSignInInput & AptosSignInBoundFields;
+  publicKey: string;
+};
 
-export type DeserializedAptosSignInOutput =
-  | {
-      version: "1";
-      type: string;
-      signature: Signature;
-      message: string;
-      publicKey: PublicKey;
-    }
-  | {
-      version: "2";
-      type: string;
-      signature: Signature;
-      input: AptosSignInInput & AptosSignInBoundFields;
-      publicKey: PublicKey;
-    };
+export type DeserializedAptosSignInOutput = {
+  version: "2";
+  type: string;
+  signature: Signature;
+  input: AptosSignInInput & AptosSignInBoundFields;
+  publicKey: PublicKey;
+};
 
 export const serializeSignInOutput = (
   output: Pick<AptosSignInOutput, "type" | "signature" | "input" | "account">,
@@ -60,26 +44,6 @@ export const deserializeSignInOutput = (
   serialized: SerializedAptosSignInOutput,
 ): DeserializedAptosSignInOutput => {
   const { version } = serialized;
-
-  if (version === "1") {
-    if (!isValidPublicKeyScheme(serialized.type)) {
-      throw new Error(`Unexpected public key scheme: ${serialized.type}`);
-    }
-
-    return {
-      version: "1",
-      type: serialized.type,
-      signature: deserializeSignInSignature(
-        serialized.type,
-        serialized.signature,
-      ),
-      publicKey: deserializeSignInPublicKey(
-        serialized.type,
-        serialized.publicKey,
-      ),
-      message: serialized.message,
-    };
-  }
 
   if (version === "2") {
     if (!isValidPublicKeyScheme(serialized.type)) {
