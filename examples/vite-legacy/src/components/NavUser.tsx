@@ -1,7 +1,8 @@
 "use client";
 
+import type { AccountAddress } from "@aptos-labs/ts-sdk";
+import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
 import { BadgeCheck, ChevronsUpDown, LogOut } from "lucide-react";
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -19,8 +20,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import useLogout from "@/hooks/useLogout";
-import type { AccountAddress } from "@aptos-labs/ts-sdk";
-import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
 
 export function NavUser({
   user,

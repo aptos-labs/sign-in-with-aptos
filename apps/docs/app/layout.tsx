@@ -12,12 +12,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
+import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import "nextra-theme-docs/style.css";
-import AppProviders from "@/context/AppProviders";
 import Image from "next/image";
+import AppProviders from "@/context/AppProviders";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://siwa.aptos.dev"),

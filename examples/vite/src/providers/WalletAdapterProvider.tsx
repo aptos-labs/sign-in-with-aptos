@@ -1,5 +1,3 @@
-import { fetchUser } from "@/hooks/useUser";
-import { fetchSignInInput, loginWithSignInOutput } from "@/lib/auth";
 import {
   type AdapterWallet,
   AptosWalletAdapterProvider,
@@ -8,6 +6,8 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { type PropsWithChildren, useCallback } from "react";
 import { toast } from "sonner";
+import { fetchUser } from "@/hooks/useUser";
+import { fetchSignInInput, loginWithSignInOutput } from "@/lib/auth";
 
 export default function WalletAdapterProvider({ children }: PropsWithChildren) {
   const queryClient = useQueryClient();

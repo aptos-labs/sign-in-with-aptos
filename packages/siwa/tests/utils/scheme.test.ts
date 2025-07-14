@@ -1,6 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: Allowed */
-import { describe, expect, test } from "vitest";
-import { getSignInPublicKeyScheme } from "../../src/utils.js";
+
 import {
   AnyPublicKey,
   Ed25519PublicKey,
@@ -8,6 +7,8 @@ import {
   MultiKey,
   SigningScheme,
 } from "@aptos-labs/ts-sdk";
+import { describe, expect, test } from "vitest";
+import { getSignInPublicKeyScheme } from "../../src/utils.js";
 
 describe("getSignInPublicKeyScheme", () => {
   test("should return the correct scheme for Ed25519PublicKey", () => {

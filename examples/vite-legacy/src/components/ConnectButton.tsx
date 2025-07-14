@@ -1,3 +1,8 @@
+import { getSignInPublicKeyScheme } from "@aptos-labs/siwa";
+import { createLegacySignInMessage } from "@aptos-labs/siwa/legacy";
+import { truncateAddress, useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import useLogout from "@/hooks/useLogout";
 import { useUser } from "@/hooks/useUser";
@@ -5,11 +10,6 @@ import {
   fetchSignInInputLegacy,
   loginWithSignInOutputLegacy,
 } from "@/lib/auth";
-import { truncateAddress, useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { createLegacySignInMessage } from "@aptos-labs/siwa/legacy";
-import { getSignInPublicKeyScheme } from "@aptos-labs/siwa";
 
 interface ConnectButtonProps extends ButtonProps {}
 
@@ -38,7 +38,7 @@ export default function ConnectButton({ ...props }: ConnectButtonProps) {
       try {
         await loginWithSignInOutputLegacy({
           account: account,
-          input: input.data,
+          message: output.fullMessage,
           signature: output.signature,
           type: getSignInPublicKeyScheme(account.publicKey),
         });

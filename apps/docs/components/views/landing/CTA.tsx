@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { AuroraText } from "@/components/ui/aurora-text";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default function CTA() {
   return (

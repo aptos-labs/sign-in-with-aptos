@@ -8,7 +8,7 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "format": "turbo format",
-    "check": "turbo test format lint",
+    "check": "turbo check test",
     "clean": "turbo clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
@@ -17,7 +17,7 @@
     "vite-legacy-example": "turbo dev --filter=@aptos-labs/siwa-vite-legacy --filter=@aptos-labs/siwa-backend --ui tui"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.6",
+    "@biomejs/biome": "^2.1.1",
     "@changesets/cli": "^2.29.5",
     "@types/node": "22.15.3",
     "@vitest/coverage-v8": "^3.2.4",

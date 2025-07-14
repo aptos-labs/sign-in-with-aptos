@@ -1,16 +1,18 @@
 import {
-  type AptosSignInInput,
   type AptosSignInBoundFields,
+  type AptosSignInInput,
   generateNonce,
 } from "@aptos-labs/siwa";
+import {
+  deserializeLegacySignInOutput,
+  verifyLegacySignIn,
+} from "@aptos-labs/siwa/legacy";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
 import { z } from "zod";
-import { generateSessionToken, createSession } from "../lib/sessions.js";
-import { getUserByAddress, createUserByAddress } from "../lib/users.js";
-import { verifyLegacySignIn } from "@aptos-labs/siwa/legacy";
-import { deserializeLegacySignInOutput } from "@aptos-labs/siwa/legacy";
+import { createSession, generateSessionToken } from "../lib/sessions.js";
+import { createUserByAddress, getUserByAddress } from "../lib/users.js";
 
 const legacyAuth = new Hono();
 

@@ -1,7 +1,7 @@
-import { BACKEND_URL } from "@/lib/utils";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
+import { BACKEND_URL } from "@/lib/utils";
 import useLogout from "./useLogout";
 
 export interface GetUserResponse {
@@ -15,7 +15,7 @@ export async function fetchUser() {
     });
     if (!response.ok) throw new Error("Failed to fetch user");
     return ((await response.json()) as GetUserResponse).data;
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 }

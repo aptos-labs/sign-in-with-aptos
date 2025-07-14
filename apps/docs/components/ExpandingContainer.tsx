@@ -1,6 +1,6 @@
 "use client";
 
-import { type Transition, motion } from "motion/react";
+import { motion, type Transition } from "motion/react";
 import useMeasure from "react-use-measure";
 
 interface ExpandingContainerProps {

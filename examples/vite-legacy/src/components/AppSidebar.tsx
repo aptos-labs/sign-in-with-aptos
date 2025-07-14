@@ -1,6 +1,7 @@
 import { SquareTerminal } from "lucide-react";
 import type * as React from "react";
-
+import { NavLink, useLocation } from "react-router";
+import AptosLabsLogo from "@/assets/aptoslabs_logo.jpeg";
 import { NavUser } from "@/components/NavUser";
 import {
   Sidebar,
@@ -15,11 +16,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-
-import AptosLabsLogo from "@/assets/aptoslabs_logo.jpeg";
 import useLogout from "@/hooks/useLogout";
 import { useUser } from "@/hooks/useUser";
-import { NavLink, useLocation } from "react-router";
 
 const data = {
   navMain: [

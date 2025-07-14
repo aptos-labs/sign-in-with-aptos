@@ -1,15 +1,15 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Route, Routes } from "react-router";
 import { AppSidebar } from "@/components/AppSidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Route, Routes } from "react-router";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "./lib/utils";
 import SignInPage from "./pages/SignInPage";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import WalletAdapterProvider from "./providers/WalletAdapterProvider";
-import { Toaster } from "@/components/ui/sonner";
 
 const queryClient = new QueryClient();
 

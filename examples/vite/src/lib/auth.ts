@@ -1,9 +1,9 @@
-import { BACKEND_URL } from "@/lib/utils";
+import { serializeSignInOutput } from "@aptos-labs/siwa";
 import type {
   AptosSignInInput,
   AptosSignInOutput,
 } from "@aptos-labs/wallet-adapter-react";
-import { serializeSignInOutput } from "@aptos-labs/siwa";
+import { BACKEND_URL } from "@/lib/utils";
 
 export const fetchSignInInput = async () => {
   const response = await fetch(`${BACKEND_URL}/auth/siwa`, {

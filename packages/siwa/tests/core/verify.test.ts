@@ -1,21 +1,21 @@
-import { describe, expect, test } from "vitest";
-import {
-  createSignInMessage,
-  verifySignInMessage,
-  verifySignInSignature,
-  createSignInSigningMessage,
-} from "../../src/core.js";
 import {
   Ed25519Account,
   Ed25519Signature,
   type PublicKey,
 } from "@aptos-labs/ts-sdk";
-import { ed25519Account } from "../lib/constants.js";
 import type {
-  AptosSignInInput,
   AptosSignInBoundFields,
+  AptosSignInInput,
 } from "@aptos-labs/wallet-standard";
+import { describe, expect, test } from "vitest";
+import {
+  createSignInMessage,
+  createSignInSigningMessage,
+  verifySignInMessage,
+  verifySignInSignature,
+} from "../../src/core.js";
 import { testMainnet } from "../lib/clients.js";
+import { ed25519Account } from "../lib/constants.js";
 
 const defaultFieldsInput = {
   domain: "example.com",

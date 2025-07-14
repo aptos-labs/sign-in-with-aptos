@@ -1,6 +1,4 @@
-import { AptosConfig, Network } from "@aptos-labs/ts-sdk";
-
-import { Aptos } from "@aptos-labs/ts-sdk";
+import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 
 /**
  * @internal

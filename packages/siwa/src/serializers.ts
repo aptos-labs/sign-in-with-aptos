@@ -1,12 +1,12 @@
+import type { PublicKey, Signature } from "@aptos-labs/ts-sdk";
 import type {
+  AptosSignInBoundFields,
   AptosSignInInput,
   AptosSignInOutput,
-  AptosSignInBoundFields,
 } from "@aptos-labs/wallet-standard";
-import type { PublicKey, Signature } from "@aptos-labs/ts-sdk";
 import {
-  deserializeSignInSignature,
   deserializeSignInPublicKey,
+  deserializeSignInSignature,
   isValidPublicKeyScheme,
 } from "./utils.js";
 

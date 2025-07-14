@@ -1,7 +1,9 @@
+import type {
+  AptosSignInBoundFields,
+  AptosSignInInput,
+} from "@aptos-labs/wallet-standard";
 import { describe, expect, test } from "vitest";
 import { createSignInMessage, parseSignInMessage } from "../../src/core.js";
-import type { AptosSignInInput } from "@aptos-labs/wallet-standard";
-import type { AptosSignInBoundFields } from "@aptos-labs/wallet-standard";
 
 const defaultFieldsInput = {
   domain: "example.com",

@@ -1,10 +1,10 @@
 "use client";
 
+import { motion } from "motion/react";
+import Link from "next/link";
 import { AuroraText } from "@/components/ui/aurora-text";
 import { Button } from "@/components/ui/button";
 import VerticalCutReveal from "@/components/ui/vertical-cut-reveal";
-import { motion } from "motion/react";
-import Link from "next/link";
 
 export default function Hero() {
   return (

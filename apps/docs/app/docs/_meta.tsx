@@ -3,8 +3,8 @@ import type { MetaRecord } from "nextra";
 export default {
   index: "Introduction",
   aip: {
-    title: "AIP-X",
-    href: "https://github.com/aptos-foundation/AIPs/pull/556",
+    title: "AIP-116",
+    href: "https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-116.md",
   },
   "---": {
     type: "separator",

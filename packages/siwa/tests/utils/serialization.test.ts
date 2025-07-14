@@ -1,3 +1,4 @@
+import { describe } from "node:test";
 import {
   AnyPublicKey,
   AnySignature,
@@ -9,13 +10,12 @@ import {
   MultiKeySignature,
   SigningScheme,
 } from "@aptos-labs/ts-sdk";
-import { describe } from "node:test";
+import { expect, test } from "vitest";
 import {
   deserializeSignInPublicKey,
   deserializeSignInSignature,
   generateNonce,
 } from "../../src/utils.js";
-import { expect, test } from "vitest";
 
 describe("deserializeSignInPublicKey", () => {
   test("should deserialize a Ed25519PublicKey using string", () => {

@@ -1,10 +1,10 @@
+import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
 import ConnectButton from "@/components/ConnectButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import useLogout from "@/hooks/useLogout";
 import { useUser } from "@/hooks/useUser";
-import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
 
 export default function SignInPage() {
   const { user, isLoggedIn } = useUser();

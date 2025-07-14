@@ -1,3 +1,6 @@
+import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import ConnectButton from "@/components/ConnectButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,10 +17,6 @@ import { Separator } from "@/components/ui/separator";
 import useLogout from "@/hooks/useLogout";
 import { useUser } from "@/hooks/useUser";
 import { saveProfile } from "@/lib/user";
-import { truncateAddress } from "@aptos-labs/wallet-adapter-react";
-import { useQueryClient } from "@tanstack/react-query";
-
-import { useState } from "react";
 
 export default function SignInPage() {
   const { user, isLoggedIn } = useUser();

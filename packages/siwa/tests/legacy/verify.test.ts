@@ -5,8 +5,8 @@ import {
   type PublicKey,
 } from "@aptos-labs/ts-sdk";
 import type {
-  AptosSignInInput,
   AptosSignInBoundFields,
+  AptosSignInInput,
 } from "@aptos-labs/wallet-standard";
 import { describe, expect, test } from "vitest";
 import {

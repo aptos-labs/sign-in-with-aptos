@@ -1,6 +1,6 @@
 import { Divider } from "@/components/Divider";
-import CTA from "@/components/views/landing/CTA";
 import CodeExamples from "@/components/views/landing/Code";
+import CTA from "@/components/views/landing/CTA";
 import Hero from "@/components/views/landing/Hero";
 
 export default function Home() {

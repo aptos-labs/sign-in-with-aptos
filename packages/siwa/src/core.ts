@@ -6,18 +6,18 @@ import {
   type Signature,
 } from "@aptos-labs/ts-sdk";
 import type {
-  AptosSignInInput,
   AptosSignInBoundFields,
+  AptosSignInInput,
 } from "@aptos-labs/wallet-standard";
 import { sha3_256 } from "@noble/hashes/sha3";
 import { arraysEqual, asyncTryOrDefault, mainnet } from "./internal.js";
+import { verifySignature } from "./signatures.js";
 import type {
   VerificationError,
   VerificationMessageError,
   VerificationResult,
   VerificationResultWithData,
 } from "./types.js";
-import { verifySignature } from "./signatures.js";
 
 /**
  * Create a SignIn message text from the input following the ABNF format defined in the Sign in with Aptos

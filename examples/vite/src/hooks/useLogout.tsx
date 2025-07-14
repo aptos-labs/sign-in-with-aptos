@@ -1,10 +1,10 @@
-import { BACKEND_URL } from "@/lib/utils";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import {
   type MutationOptions,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import { BACKEND_URL } from "@/lib/utils";
 
 export default function useLogout({ ...options }: MutationOptions = {}) {
   const { connected, disconnect } = useWallet();

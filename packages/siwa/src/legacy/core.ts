@@ -7,14 +7,14 @@ import {
   type Signature,
 } from "@aptos-labs/ts-sdk";
 import type {
-  AptosSignInInput,
   AptosSignInBoundFields,
+  AptosSignInInput,
 } from "@aptos-labs/wallet-standard";
 import { sha3_256 } from "@noble/hashes/sha3";
 import { createSignInMessage } from "../core.js";
-import type { VerificationError } from "../types.js";
-import { verifySignature } from "../signatures.js";
 import { mainnet } from "../internal.js";
+import { verifySignature } from "../signatures.js";
+import type { VerificationError } from "../types.js";
 
 export type VerificationFullMessageError = "invalid_full_message";
 

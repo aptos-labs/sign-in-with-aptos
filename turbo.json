@@ -18,6 +18,10 @@
     "format:fix": {
       "cache": false
     },
+    "check": {},
+    "check:fix": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true

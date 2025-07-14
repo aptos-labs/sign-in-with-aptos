@@ -1,3 +1,6 @@
+import { truncateAddress, useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import useLogout from "@/hooks/useLogout";
 import { useUser } from "@/hooks/useUser";
@@ -6,9 +9,6 @@ import {
   fetchSignInInput,
   loginWithSignInOutput,
 } from "@/lib/auth";
-import { truncateAddress, useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 interface ConnectButtonProps extends ButtonProps {
   siwaVariant?: "default" | "error";
