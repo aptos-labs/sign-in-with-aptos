@@ -1,0 +1,28 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# getSignInPublicKeyScheme
+
+Gets the signing scheme of a public key.
+
+```tsx
+import { getSignInPublicKeyScheme } from "@aptos-labs/siwa";
+import { Ed25519PublicKey, AnyPublicKey, SigningScheme } from "@aptos-labs/ts-sdk";
+
+// From a PublicKey instance
+const ed25519Key = new Ed25519PublicKey(new Uint8Array(32));
+const scheme1 = getSignInPublicKeyScheme(ed25519Key); // "ed25519"
+
+const singleKey = new AnyPublicKey(ed25519Key);
+const scheme2 = getSignInPublicKeyScheme(singleKey); // "single_key"
+
+// From a SigningScheme enum
+const scheme3 = getSignInPublicKeyScheme(SigningScheme.Ed25519); // "ed25519"
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { getSignInPublicKeyScheme as default } from "@aptos-labs/siwa";`,
+  })}
+/>

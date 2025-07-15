@@ -1,0 +1,34 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# verifySignInSignature
+
+Verifies whether the signature is valid for the given `AptosSignInInput` and public key. This is used to verify the signature and `AptosSignInInput` acquired
+from the wallet in the `AptosSignInOutput`.
+
+```tsx
+import { verifySignInSignature, deserializeSignInOutput, type SerializedAptosSignInOutput } from "@aptos-labs/siwa";
+
+const serializedOutput: SerializedAptosSignInOutput = // ... response from the `serializeSignInOutput` function
+
+const output = deserializeSignInOutput(serializedOutput);
+
+// Verify the signature matches the message
+const result = await verifySignInSignature({
+  publicKey: output.publicKey,
+  signature: output.signature,
+  input: output.input,
+});
+
+if (!result.valid) {
+  // Signature verification failed: result.errors
+}
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { verifySignInSignature as default } from "@aptos-labs/siwa";`,
+  })}
+/>
+

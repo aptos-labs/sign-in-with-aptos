@@ -1,0 +1,46 @@
+---
+title: "Auto Connect"
+---
+
+# Auto Connect
+
+The `WalletAdapterProvider` component accepts a `autoConnect` prop that will automatically connect to the wallet when the component is mounted. In order to properly integrate this with SIWA,
+you will need to pass in a function to the `autoConnect` prop that will either do one of the following:
+
+- Checks if the `signIn` function is available. If it is not, proceed with a regular wallet connection flow.
+- Otherwise, call the `signIn` function and handle the response.
+
+### Usage
+
+```tsx filename="frontend.tsx"
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+
+export default function WalletAdapterProvider({ children }: { children: React.ReactNode }) {
+
+  const autoConnect =  async (core: WalletCore, adapter: AdapterWallet) => {
+      const isLoggedIn: boolean = // ... logic to determine if the user is logged in
+    
+      if (!adapter.features["aptos:signIn"] || isLoggedIn) {
+        return true; // Proceed with a regular wallet connection flow
+      }
+
+      const input: AptosSignInInput = // ... logic to fetch the AptosSignInInput
+
+      const output: AptosSignInOutput = await core.signIn({
+        walletName: adapter.name,
+        input: input.data,
+      });
+
+      // ... logic to handle the sign in response
+      // await handleSignInResponse(output);
+
+      return false; // Finished the SIWA flow, ignore the regular wallet connection flow
+    }
+
+  return (
+    <AptosWalletAdapterProvider autoConnect={autoConnect}>
+      {children}
+    </AptosWalletAdapterProvider>
+  )
+}
+```

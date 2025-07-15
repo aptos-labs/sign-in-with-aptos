@@ -1,0 +1,33 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# deserializeSignInSignature
+
+Deserializes a serialized signature using the scheme provided to the function.
+
+```tsx
+import { deserializeSignInSignature } from "@aptos-labs/siwa";
+import { Ed25519Signature } from "@aptos-labs/ts-sdk";
+
+// Create a signature and serialize it
+const originalSignature = new Ed25519Signature(new Uint8Array(64));
+const serializedHex = originalSignature.bcsToHex().toString();
+
+// Deserialize using scheme string
+const deserializedSig1 = deserializeSignInSignature("ed25519", serializedHex);
+
+// Deserialize using SigningScheme enum
+import { SigningScheme } from "@aptos-labs/ts-sdk";
+const deserializedSig2 = deserializeSignInSignature(SigningScheme.Ed25519, serializedHex);
+
+// Other schemes
+const singleSigHex = "0x1234567890abcdef..."; // serialized AnySignature
+const singleSig = deserializeSignInSignature("single_key", singleSigHex);
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { deserializeSignInSignature as default } from "@aptos-labs/siwa";`,
+  })}
+/>

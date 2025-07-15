@@ -23,6 +23,7 @@ auth.get("/auth/siwa", (c) => {
 
   const input = {
     nonce,
+    domain: "myapp.com",
     statement: "Sign into to get access to this demo application",
   } satisfies AptosSignInInput;
 
@@ -39,10 +40,12 @@ auth.post(
   async (c) => {
     const { output } = c.req.valid("json");
 
-    const input = getCookie(c, "siwa-input");
-    if (!input) return c.json({ error: "input_not_found" }, 400);
+    const expectedInput = getCookie(c, "siwa-input");
+    if (!expectedInput) return c.json({ error: "input_not_found" }, 400);
 
     const deserializedOutput = deserializeSignInOutput(output);
+
+    const signatureVerification = await verifySignInSignature(deserializedOutput);
 
     if (!signatureVerification.valid) {
       return c.json(
@@ -51,13 +54,17 @@ auth.post(
       );
     }
 
-    const messageVerification = verifySignInMessage(
-      { ...(JSON.parse(input) as AptosSignInInput), domain: FRONTEND_URL },
-      deserializedOutput.message,
+    const messageVerification = await verifySignInMessage({
+      input: deserializedOutput.input,
+      expected: JSON.parse(expectedInput) as AptosSignInInput,
+      publicKey: deserializedOutput.publicKey,
     );
 
     if (!messageVerification.valid) {
-      return c.json({ error: \`\${messageVerification.errors.join(", ")}\` }, 400);
+      return c.json(
+        { error: \`\${messageVerification.errors.join(", ")}\` },
+        400,
+      );
     }
 
     // ... Generate and store a session for the user

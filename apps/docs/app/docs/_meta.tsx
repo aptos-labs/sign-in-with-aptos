@@ -1,6 +1,10 @@
 import type { MetaRecord } from "nextra";
 
 export default {
+  "--": {
+    type: "separator",
+    title: "Overview",
+  },
   index: "Introduction",
   aip: {
     title: "AIP-116",
@@ -8,7 +12,13 @@ export default {
   },
   "---": {
     type: "separator",
-    title: "Libraries",
+    title: "Typescript",
   },
-  typescript: "TypeScript",
+  "ts-aptos-labs-siwa": "@aptos-labs/siwa",
+  "ts-aptos-labs-wallet-adapter-react": "@aptos-labs/wallet-adapter-react",
+  "----": {
+    type: "separator",
+    title: "Support",
+  },
+  "wallet-integrations": "Wallet Integrations",
 } satisfies MetaRecord;

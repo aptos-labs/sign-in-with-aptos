@@ -1,0 +1,39 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# verifySignInMessage
+
+Verifies an `AptosSignInInput` against another `AptosSignInInput`. Typically, this is to compare the `AptosSignInInput` acquired from the wallet and the
+`AptosSignInInput` stored in the backend at the beginning of a Sign in with Aptos flow.
+
+```tsx
+import { verifySignInMessage, deserializeSignInOutput, type AptosSignInInput, type SerializedAptosSignInOutput } from "@aptos-labs/siwa";
+
+const expectedInput: AptosSignInInput = {
+  domain: "example.com",
+  nonce: "abc123def456",
+  statement: "Sign in to Example.com to access your account"
+};
+
+const serializedOutput: SerializedAptosSignInOutput = // ... response from the `serializeSignInOutput` function
+
+const output = deserializeSignInOutput(serializedOutput);
+
+const result = await verifySignInMessage({
+  expected: expectedInput,
+  input: output.input,
+  publicKey: output.publicKey
+});
+
+if (!result.valid) {
+  // Message verification failed: result.errors
+}
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { verifySignInMessage as default } from "@aptos-labs/siwa";`,
+  })}
+/>
+

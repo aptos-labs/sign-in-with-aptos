@@ -1,0 +1,40 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# createSignInMessage
+
+Creates a human readable SIWA message to be displayed to the user.
+
+```tsx
+import { createSignInMessage, type AptosSignInInput } from "@aptos-labs/siwa";
+
+const input: AptosSignInInput = {
+  domain: "example.com",
+  address: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+  version: "1",
+  chainId: "aptos:mainnet",
+  nonce: "abc123def456",
+  uri: "https://example.com",
+  statement: "Sign in to Example.com to access your account"
+};
+
+const message = createSignInMessage(input);
+// Returns:
+// "example.com wants you to sign in with your Aptos account:
+// 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+// 
+// Sign in to Example.com to access your account
+// 
+// URI: https://example.com
+// Version: 1
+// Nonce: abc123def456
+// Chain ID: aptos:mainnet"
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { createSignInMessage as default } from "@aptos-labs/siwa";`,
+  })}
+/>
+

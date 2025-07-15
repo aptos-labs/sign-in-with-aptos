@@ -1,0 +1,21 @@
+---
+title: "Wallet Compatibility"
+---
+
+# Wallet Compatibility
+
+In order to check for wallet compatibility from the `@aptos-labs/wallet-adapter-react` package, you can use the `useWallet` hook to check for the `aptos:signIn` feature.
+
+If this feature is available, the wallet supports the SIWA flow. Otherwise, if the wallet does not support the SIWA flow, it is recommend to proceed using the `connect` + `signMessage` flow instead.
+
+### Usage
+
+```tsx
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+
+const { wallet } = useWallet();
+
+if (wallet?.features["aptos:signIn"]) {
+  // The wallet supports the SIWA flow
+}
+```

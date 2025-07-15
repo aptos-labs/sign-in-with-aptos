@@ -30,6 +30,13 @@ export type DeserializedAptosSignInOutput = {
   publicKey: PublicKey;
 };
 
+/**
+ * A helper function that serializes a `AptosSignInOutput` to a versioned `SerializedAptosSignInOutput`. This format is used to help transfer
+ * the `AptosSignInOutput` from the frontend to the backend.
+ *
+ * @param output - The `AptosSignInOutput` to serialize.
+ * @returns The serialized `AptosSignInOutput`.
+ */
 export const serializeSignInOutput = (
   output: Pick<AptosSignInOutput, "type" | "signature" | "input" | "account">,
 ): SerializedAptosSignInOutput => ({
@@ -40,6 +47,13 @@ export const serializeSignInOutput = (
   publicKey: output.account.publicKey.bcsToHex().toString(),
 });
 
+/**
+ * A helper function that deserializes a `SerializedAptosSignInOutput` to a `AptosSignInOutput`. This format is used to help transfer
+ * the `AptosSignInOutput` from the backend to the frontend.
+ *
+ * @param serialized - The `SerializedAptosSignInOutput` to deserialize.
+ * @returns The deserialized `AptosSignInOutput`.
+ */
 export const deserializeSignInOutput = (
   serialized: SerializedAptosSignInOutput,
 ): DeserializedAptosSignInOutput => {

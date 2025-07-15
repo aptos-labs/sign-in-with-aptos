@@ -1,0 +1,27 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# generateNonce
+
+Generates a randomized nonce used to prevent replay attacks.
+
+```tsx
+import { generateNonce, type AptosSignInInput } from "@aptos-labs/siwa";
+
+const nonce = generateNonce(); // "abc123def456ghi789"
+
+const input: AptosSignInInput = {
+  domain: "example.com",
+  address: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+  version: "1",
+  chainId: "aptos:mainnet",
+  nonce // Use the generated nonce here
+};
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { generateNonce as default } from "@aptos-labs/siwa";`,
+  })}
+/>

@@ -1,0 +1,23 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# serializeSignInOutput
+
+Serializes a `AptosSignInOutput` to a versioned `SerializedAptosSignInOutput`. This format is used to transfer the `AptosSignInOutput`
+from the backend to the frontend.
+
+```tsx
+import { serializeSignInOutput, type AptosSignInOutput, type AptosSignInInput } from "@aptos-labs/siwa";
+
+const output: AptosSignInOutput = // .. response from the `signIn` function
+
+const serialized = serializeSignInOutput(output); // { version: "2", type: "ed25519", signature: "0x...", input: {...}, publicKey: "0x..." }
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { serializeSignInOutput as default } from "@aptos-labs/siwa";`,
+  })}
+/>
+

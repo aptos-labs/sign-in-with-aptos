@@ -1,0 +1,27 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# isValidPublicKeyScheme
+
+Checks if a public key scheme is valid.
+
+```tsx
+import { isValidPublicKeyScheme } from "@aptos-labs/siwa";
+
+// Check valid schemes
+isValidPublicKeyScheme("ed25519"); // true
+isValidPublicKeyScheme("multi_ed25519"); // true
+isValidPublicKeyScheme("single_key"); // true
+isValidPublicKeyScheme("multi_key"); // true
+
+// Check invalid schemes
+isValidPublicKeyScheme("invalid_scheme"); // false
+isValidPublicKeyScheme("rsa"); // false
+```
+
+## Specifications   
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { isValidPublicKeyScheme as default } from "@aptos-labs/siwa";`,
+  })}
+/>

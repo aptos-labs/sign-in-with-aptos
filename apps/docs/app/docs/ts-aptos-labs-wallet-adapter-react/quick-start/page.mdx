@@ -1,0 +1,117 @@
+---
+title: "Quick Start"
+---
+
+import { Steps } from "nextra/components";
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# Quick Start
+
+<Steps>
+
+## Install dependencies
+
+Using your preferred package manager, install the `@aptos-labs/wallet-adapter-react` package.
+
+```sh npm2yarn
+npm i @aptos-labs/wallet-adapter-react
+```
+
+## Setup Wallet Adapter
+
+Setup your application to use the `AptosWalletAdapterProvider` component. For more information on how to setup the wallet adapter, please refer to the [wallet adapter documentation](https://aptos.dev/en/build/sdks/wallet-adapter/dapp).
+
+```tsx filename="frontend.tsx"
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+
+export default function WalletAdapterProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <AptosWalletAdapterProvider>
+      {children}
+    </AptosWalletAdapterProvider>
+  )
+}
+```
+
+## Use the `signIn` function
+
+The `useWallet` hook exposes a `signIn` function that will handle the wallet adapter setup and the SIWA flow.
+
+```tsx filename="frontend.tsx"
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+
+export default function ConnectButton() {
+  const { signIn } = useWallet();
+
+  const handleSignIn = async () => {
+    const input: AptosSignInInput = // Logic to fetch the AptosSignInInput
+
+    const output: AptosSignInOutput = await signIn(input);
+
+    // ... Logic to handle the sign in response
+    // await handleSignInResponse(output);
+  }
+
+  return <button onClick={handleSignIn}>Connect</button>;
+}
+```
+
+**Specifications**
+
+<TSDoc
+  definition={generateDefinition({
+    code: `import { WalletContextState } from "@aptos-labs/wallet-adapter-react";
+    type SignIn = Pick<WalletContextState, "signIn">;
+    export default SignIn;
+    `,
+  })}
+/>
+
+## Auto Connect (Optional)
+
+The `WalletAdapterProvider` component accepts a `autoConnect` prop that will automatically connect to the wallet when the component is mounted. In order to properly integrate this with SIWA,
+you will need to pass in a function to the `autoConnect` prop that will either do one of the following:
+
+- Checks if the `signIn` function is available. If it is not, proceed with a regular wallet connection flow.
+- Otherwise, call the `signIn` function and handle the response.
+
+The `autoConnect` prop will take in a function that will be returned either `true` or `false` determining whether to proceed with a regular wallet connection.
+
+```tsx filename="frontend.tsx"
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
+
+export default function WalletAdapterProvider({ children }: { children: React.ReactNode }) {
+
+  const autoConnect =  async (core: WalletCore, adapter: AdapterWallet) => {
+      const isLoggedIn: boolean = // ... logic to determine if the user is logged in
+    
+      if (!adapter.features["aptos:signIn"] || isLoggedIn) {
+        return true; // Proceed with a regular wallet connection flow
+      }
+
+      const input: AptosSignInInput = // ... logic to fetch the AptosSignInInput
+
+      const output: AptosSignInOutput = await core.signIn({
+        walletName: adapter.name,
+        input: input.data,
+      });
+
+      // ... logic to handle the sign in response
+      // await handleSignInResponse(output);
+
+      return false; // Finished the SIWA flow, ignore the regular wallet connection flow
+    }
+
+  return (
+    <AptosWalletAdapterProvider autoConnect={autoConnect}>
+      {children}
+    </AptosWalletAdapterProvider>
+  )
+}
+```
+</Steps>
+
+## Next Steps
+
+That concludes the quick start guide for using the `@aptos-labs/wallet-adapter-react` package. If you are interested in the full example, please refer to this [example](https://github.com/aptos-labs/siwa/tree/main/examples/vite).
+

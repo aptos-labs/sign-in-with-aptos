@@ -1,5 +1,4 @@
 import {
-  type AptosSignInBoundFields,
   type AptosSignInInput,
   deserializeSignInOutput,
   generateNonce,
@@ -56,8 +55,8 @@ auth.post(
   async (c) => {
     const { output } = c.req.valid("json");
 
-    const input = getCookie(c, "siwa-input");
-    if (!input) return c.json({ error: "input_not_found" }, 400);
+    const expectedInput = getCookie(c, "siwa-input");
+    if (!expectedInput) return c.json({ error: "input_not_found" }, 400);
 
     const deserializedOutput = deserializeSignInOutput(output);
 
@@ -73,7 +72,7 @@ auth.post(
 
     const messageVerification = await verifySignInMessage({
       input: deserializedOutput.input,
-      expected: JSON.parse(input) as AptosSignInInput & AptosSignInBoundFields,
+      expected: JSON.parse(expectedInput) as AptosSignInInput,
       publicKey: deserializedOutput.publicKey,
     });
 

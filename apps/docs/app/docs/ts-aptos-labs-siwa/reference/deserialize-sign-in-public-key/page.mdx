@@ -1,0 +1,32 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# deserializeSignInPublicKey
+
+Deserializes a serialized public key using the scheme provided to the function.
+
+```tsx
+import { deserializeSignInPublicKey } from "@aptos-labs/siwa";
+import { Ed25519PublicKey, SigningScheme } from "@aptos-labs/ts-sdk";
+
+// Create a public key and serialize it
+const originalKey = new Ed25519PublicKey(new Uint8Array(32));
+const serializedHex = originalKey.bcsToHex().toString();
+
+// Deserialize using scheme string
+const deserializedKey1 = deserializeSignInPublicKey("ed25519", serializedHex);
+
+// Deserialize using SigningScheme enum
+const deserializedKey2 = deserializeSignInPublicKey(SigningScheme.Ed25519, serializedHex);
+
+// Other schemes
+const singleKeyHex = "0x1234567890abcdef..."; // serialized AnyPublicKey
+const singleKey = deserializeSignInPublicKey("single_key", singleKeyHex);
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { deserializeSignInPublicKey as default } from "@aptos-labs/siwa";`,
+  })}
+/>

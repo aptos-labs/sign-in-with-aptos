@@ -1,0 +1,200 @@
+---
+title: "Quick Start"
+---
+
+import { Steps } from "nextra/components";
+
+# Quick Start
+
+<Steps>
+
+## Install dependencies
+
+Using your preferred package manager, install the `@aptos-labs/siwa` package.
+
+```sh npm2yarn
+npm i @aptos-labs/siwa
+```
+
+## Setup Backend (Optional)
+
+In this guide, we will be using a Hono backend to handle the SIWA flow.
+
+```sh npm2yarn
+npm i hono
+```
+
+```tsx filename="backend.ts"
+import { Hono } from "hono";
+
+export const app = new Hono();
+
+serve({ fetch: app.fetch, port: 3000 });
+```
+
+## Setup Frontend
+
+In this guide, we will be using the `@aptos-labs/wallet-adapter-react` package to handle the SIWA flow. For more information on how to setup the wallet adapter, please refer to the [wallet adapter documentation](https://aptos.dev/en/build/sdks/wallet-adapter/dapp).
+
+```sh npm2yarn
+npm i @aptos-labs/wallet-adapter-react
+```
+
+```tsx filename="frontend.tsx"
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+
+export default function SignInPage() {
+  const { signIn } = useWallet();
+}
+```
+
+
+## Pre-signing endpoint
+
+Add a route to your application responsible for constructing an `AptosSignInInput` with pre-filled fields. The `AptosSignInInput` object should be stored so that 
+it can be used later to verify the `AptosSignInOutput` from the wallet. 
+
+```ts filename="backend.ts"
+import { generateNonce, AptosSignInInput } from "@aptos-labs/siwa";
+
+app.get("/auth/siwa", (c) => {
+  const nonce = generateNonce();
+
+  const input = {
+    nonce,
+    domain: FRONTEND_URL,
+    statement: "Sign into to get access to this demo application",
+  } satisfies AptosSignInInput;
+
+  setCookie(c, "siwa-input", JSON.stringify(input), {
+    httpOnly: true,
+    sameSite: "lax",
+  });
+
+  return c.json({ data: input });
+});
+```
+
+## Using the pre-fetched `AptosSignInInput`
+
+On the frontend, the application should call the newly added endpoint (in this case `/auth/siwa`) and send a `signIn` signing request to the wallet with the `AptosSignInInput` received from that endpoint.
+
+```tsx filename="frontend.tsx"
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { AptosSignInInput, AptosSignInOutput } from "@aptos-labs/siwa";
+
+export default function SignInPage() {
+  const { signIn } = useWallet();
+
+  const handleSignIn = async () => {
+    const inputResponse = await fetch("/auth/siwa");
+
+    const input: AptosSignInInput = await inputResponse.json();
+
+    const response: AptosSignInOutput = await signIn(input);
+
+    // ...
+  };
+
+  return (
+    <div>
+      <button onClick={handleSignIn}>Sign In</button>
+    </div>
+  );
+}
+```
+
+## `AptosSignInOutput` verification endpoint
+
+The application's backend should have another endpoint to verify the stored `AptosSignInInput` constructed at the beginning of the flow to the `AptosSignInOutput` from the wallet.
+For message verification, the stored `AptosSignInInput` should be used as the expected fields. If the verification is successful, the application should typically create an 
+authentication session for the user (e.g. cookies, OAuth, JWT, etc.).
+
+In the following code example, we use serializers from the `@aptos-labs/siwa` package to deserialize the `AptosSignInOutput` from the wallet.
+
+```ts filename="backend.ts"
+import {
+  deserializeSignInPublicKey,
+  deserializeSignInSignature,
+  deserializeSignInInput,
+  verifySignInSignature,
+  verifySignInMessage,
+  deserializeSignInOutput,
+} from "@aptos-labs/siwa";
+
+const app = new Hono();
+
+app.post("/auth/siwa/verify", (c) => {
+  const { output } = c.req.json();
+
+  const deserializedOutput = deserializeSignInOutput(output);
+
+  const signatureVerification = verifySignInSignature(deserializedOutput);
+
+  if (!signatureVerification.valid)
+    return c.json({ errors: signatureVerification.errors }, 400);
+
+  const expectedInput = getCookie(c, "siwa-input")
+
+  if (!expectedInput) 
+    return c.json({ error: "input_not_found" }, 400);
+
+  const messageVerification = verifySignInMessage({
+      input: deserializedOutput.input,
+      expected: JSON.parse(expectedInput) as AptosSignInInput,
+      publicKey: deserializedOutput.publicKey,
+  });
+
+  if (!messageVerification.valid)
+    return c.json({ errors: messageVerification.errors }, 400);
+
+  // ... create and store a session for the user
+
+  return c.json({ data: verification });
+});
+```
+
+## Calling the verification endpoint from the frontend
+
+Once the verification endpoint has been created and the wallet successfully responds to the application with the `AptosSignInOutput`, 
+verify the `AptosSignInOutput` with the new verification endpoint.
+
+```tsx filename="frontend.tsx"
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { serializeSignInOutput, AptosSignInInput, AptosSignInOutput } from "@aptos-labs/siwa";
+
+export default function SignInPage() {
+  const { signIn } = useWallet();
+
+  const handleSignIn = async () => {
+    const inputResponse = await fetch("/auth/siwa");
+
+    const input: AptosSignInInput = await inputResponse.json();
+
+    const response: AptosSignInOutput = await signIn(input);
+
+    const verification = await fetch("/auth/siwa/verify", {
+      method: "POST",
+      body: JSON.stringify({
+        output: serializeSignInOutput(response),
+      }),
+    });
+
+    if (!verification.ok) throw new Error("Failed to verify message");
+
+    // ... the user is signed in, redirect to application
+  };
+
+  return (
+    <div>
+      <button onClick={handleSignIn}>Sign In</button>
+    </div>
+  );
+}
+```
+
+</Steps>
+
+## Next Steps
+
+For the entire implemenetation, visit the [backend](https://github.com/aptos-labs/sign-in-with-aptos/tree/main/examples/backend) and [frontend](https://github.com/aptos-labs/sign-in-with-aptos/tree/main/examples/frontend) examples in the [aptos-labs/sign-in-with-aptos](https://github.com/aptos-labs/sign-in-with-aptos) repository.

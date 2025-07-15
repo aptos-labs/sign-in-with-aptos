@@ -127,6 +127,14 @@ export function deserializeSignInPublicKey(
   }
 }
 
+/**
+ * Deserialize a signature from a hex string.
+ *
+ * @param scheme The signing scheme of the signature.
+ * @param value The hex string to deserialize.
+ *
+ * @returns The deserialized signature.
+ */
 export function deserializeSignInSignature(
   scheme:
     | SigningScheme
@@ -167,6 +175,11 @@ export function deserializeSignInSignature(
   }
 }
 
+/**
+ * Generates a random nonce using the `crypto.getRandomValues` API.
+ *
+ * @returns A random nonce.
+ */
 export function generateNonce(): string {
   const bytes = new Uint8Array(12);
   crypto.getRandomValues(bytes);

@@ -1,0 +1,21 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# deserializeSignInOutput
+
+Deserializes a serialized SIWA input serialized by the `serializeSignInOutput` function. This is used to consume the `AptosSignInOutput` passed from the frontend to the backend.
+
+```tsx
+import { deserializeSignInOutput, type SerializedAptosSignInOutput } from "@aptos-labs/siwa";
+
+const serializedOutput: SerializedAptosSignInOutput = // ... response from the `serializeSignInOutput` function
+
+const deserialized = deserializeSignInOutput(serializedOutput); // // { version: "2", type: "ed25519", signature: Ed25519Signature, publicKey: Ed25519PublicKey, input: {...} }
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { deserializeSignInOutput as default } from "@aptos-labs/siwa";`,
+  })}
+/>

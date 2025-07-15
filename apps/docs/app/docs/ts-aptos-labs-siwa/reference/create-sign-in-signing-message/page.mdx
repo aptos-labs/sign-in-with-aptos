@@ -1,0 +1,30 @@
+import { TSDoc, generateDefinition } from "nextra/tsdoc";
+
+# createSignInSigningMessage
+
+Creates a signing message from a human readable SIWA message. This signing message is used to be signed by the wallet when the user signs in.
+
+```tsx
+import { createSignInMessage, createSignInSigningMessage, type AptosSignInInput } from "@aptos-labs/siwa";
+
+const input: AptosSignInInput = {
+  domain: "example.com",
+  address: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+  version: "1",
+  chainId: "aptos:mainnet",
+  nonce: "abc123def456"
+};
+
+const message = createSignInMessage(input);
+
+const signingMessage = createSignInSigningMessage(message); // `Uint8Array` that includes the domain separator hash + message
+```
+
+## Specifications
+
+<TSDoc
+  definition={generateDefinition({
+    code: `export { createSignInSigningMessage as default } from "@aptos-labs/siwa";`,
+  })}
+/>
+

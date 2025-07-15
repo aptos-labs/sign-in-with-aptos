@@ -20,12 +20,11 @@ import type {
 } from "./types.js";
 
 /**
- * Create a SignIn message text from the input following the ABNF format defined in the Sign in with Aptos
- * specifications.
+ * Create a SIWA message from the input following the ABNF format defined in the Sign in with Aptos specifications.
  *
- * @param input The input to create the SignIn message text from.
+ * @param input The input to create the SIWA message from.
  *
- * @returns The SignIn message text.
+ * @returns The SIWA message text.
  */
 export function createSignInMessage(
   input: AptosSignInInput & AptosSignInBoundFields,
@@ -77,7 +76,7 @@ export function createSignInMessage(
 }
 
 /**
- * Generate a signing message using the Sign in with Aptos signing algorithm.
+ * Generate a signing message using the SIWA signing algorithm.
  * ( sha3_256(b"SIGN_IN_WITH_APTOS::" ) || <message> )
  *
  * @param message The SIWA message to sign.
