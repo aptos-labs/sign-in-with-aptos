@@ -1,5 +1,11 @@
 # @aptos-labs/siwa
 
+## 0.4.0
+
+### Minor Changes
+
+- 2969f01: breaking: Removed v1 serialization for `serializeSignInOutput` and `deserializeSignInOutput`
+
 ## 0.3.0
 
 ### Minor Changes
