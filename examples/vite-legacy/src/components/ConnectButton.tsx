@@ -19,8 +19,6 @@ export default function ConnectButton({ ...props }: ConnectButtonProps) {
   const queryClient = useQueryClient();
   const { signMessage, disconnect, connect, account } = useWallet();
 
-  console.log(account?.publicKey);
-
   const { mutate: signMessageAndLogin } = useMutation({
     mutationFn: async () => {
       if (!account) throw new Error("User not found");

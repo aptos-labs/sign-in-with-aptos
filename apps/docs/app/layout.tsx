@@ -45,6 +45,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://siwa.aptos.dev",
+    images: [{ url: "/og_image.jpeg", width: 1200, height: 630 }],
     siteName: "Sign in with Aptos",
     title: "Sign in with Aptos (SIWA)",
     description:
@@ -53,6 +54,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Sign in with Aptos (SIWA)",
+    images: [{ url: "/og_image.jpeg", width: 1200, height: 630 }],
     description:
       "Authenticate users securely using their Aptos account. A standardized authentication protocol for Web3 applications.",
     creator: "@AptosLabs",
