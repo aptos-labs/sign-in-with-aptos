@@ -18,12 +18,29 @@ import { z } from "zod";
 
 const auth = new Hono();
 
+// Define your supported domains
+const SUPPORTED_DOMAINS = [
+  "myapp.com",
+  "app.myapp.com",
+  "localhost:3000",
+];
+
 auth.get("/auth/siwa", (c) => {
+  const origin = c.req.header("origin");
+  
+  // Extract domain from origin (remove protocol)
+  const domain = origin?.replace(/^https?:\\/\\//, "");
+  
+  // Validate the domain against supported domains
+  if (!domain || !SUPPORTED_DOMAINS.includes(domain)) {
+    return c.json({ error: "Unsupported origin" }, 403);
+  }
+
   const nonce = generateNonce();
 
   const input = {
     nonce,
-    domain: "myapp.com",
+    domain,
     statement: "Sign into to get access to this demo application",
   } satisfies AptosSignInInput;
 
