@@ -54,15 +54,34 @@ export default function SignInPage() {
 Add a route to your application responsible for constructing an `AptosSignInInput` with pre-filled fields. The `AptosSignInInput` object should be stored so that 
 it can be used later to verify the `AptosSignInOutput` from the wallet. 
 
+The domain should be determined from the request's origin header and validated against a list of supported domains to ensure security.
+
 ```ts filename="backend.ts"
 import { generateNonce, AptosSignInInput } from "@aptos-labs/siwa";
 
+// Define your supported domains
+const SUPPORTED_DOMAINS = [
+  "example.com",
+  "app.example.com",
+  "localhost:3000",
+];
+
 app.get("/auth/siwa", (c) => {
+  const origin = c.req.header("origin");
+  
+  // Extract domain from origin (remove protocol)
+  const domain = origin?.replace(/^https?:\/\//, "");
+  
+  // Validate the domain against supported domains
+  if (!domain || !SUPPORTED_DOMAINS.includes(domain)) {
+    return c.json({ error: "Unsupported origin" }, 403);
+  }
+
   const nonce = generateNonce();
 
   const input = {
     nonce,
-    domain: FRONTEND_URL,
+    domain,
     statement: "Sign into to get access to this demo application",
   } satisfies AptosSignInInput;
 
