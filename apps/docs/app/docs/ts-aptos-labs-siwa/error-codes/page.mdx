@@ -1,0 +1,171 @@
+---
+title: "Error Codes"
+---
+
+# Error Codes
+
+This page describes the error codes that can be returned by the verification functions in the `@aptos-labs/siwa` package.
+
+When verifying Sign in with Aptos (SIWA) messages and signatures, the verification functions return a `VerificationResult` object that contains either a success indicator or a list of errors.
+
+## Error Types
+
+The verification errors are categorized into three main types:
+
+### Verification Comparison Errors
+
+These errors occur when the expected fields don't match the actual input fields received from the wallet.
+
+| Error Code | Description |
+|------------|-------------|
+| `message_domain_mismatch` | The domain in the message doesn't match the expected domain |
+| `message_address_mismatch` | The address in the message doesn't match the expected address |
+| `message_statement_mismatch` | The statement in the message doesn't match the expected statement |
+| `message_uri_mismatch` | The URI in the message doesn't match the expected URI |
+| `message_version_mismatch` | The version in the message doesn't match the expected version |
+| `message_chain_id_mismatch` | The chain ID in the message doesn't match the expected chain ID |
+| `message_nonce_mismatch` | The nonce in the message doesn't match the expected nonce |
+| `message_issued_at_mismatch` | The issued at timestamp in the message doesn't match the expected value |
+| `message_expiration_time_mismatch` | The expiration time in the message doesn't match the expected value |
+| `message_not_before_mismatch` | The not before timestamp in the message doesn't match the expected value |
+| `message_request_id_mismatch` | The request ID in the message doesn't match the expected request ID |
+| `message_resources_missing` | The message is missing expected resources |
+| `message_resources_mismatch` | The resources in the message don't match the expected resources |
+| `message_resources_unexpected` | The message contains resources that were not expected |
+
+### Verification Signature Errors
+
+These errors occur when there are issues with the cryptographic signature or public key validation.
+
+| Error Code | Description |
+|------------|-------------|
+| `invalid_signature` | The signature is invalid or doesn't match the message and public key |
+| `invalid_public_key` | The public key format is invalid or not supported |
+| `invalid_auth_key` | The authentication key of the account doesn't match the public key's derived authentication key |
+
+### Verification Message Errors
+
+These errors occur when the message format is invalid or when time-based validations fail.
+
+| Error Code | Description |
+|------------|-------------|
+| `invalid_message` | The message format doesn't follow the SIWA specification |
+| `message_domain_missing` | The required domain field is missing from the message |
+| `message_address_missing` | The required address field is missing from the message |
+| `message_statement_missing` | The required statement field is missing from the message |
+| `message_version_missing` | The required version field is missing from the message |
+| `message_chain_id_missing` | The required chain ID field is missing from the message |
+| `message_expired` | The message has expired (current time is past the expiration time) |
+| `message_not_yet_valid` | The message is not yet valid (current time is before the not before time) |
+
+## Usage Example
+
+When calling verification functions, you can handle errors as follows:
+
+```tsx
+import { verifySignInMessage, verifySignInSignature } from "@aptos-labs/siwa";
+
+// Verify the signature
+const signatureResult = await verifySignInSignature(output);
+
+if (!signatureResult.valid) {
+  console.error("Signature verification failed:", signatureResult.errors);
+  
+  // Handle specific errors
+  if (signatureResult.errors.includes("invalid_signature")) {
+    // The signature is invalid - possible tampering
+  }
+  if (signatureResult.errors.includes("invalid_auth_key")) {
+    // The account's auth key doesn't match the public key
+  }
+}
+
+// Verify the message
+const messageResult = await verifySignInMessage({
+  expected: expectedInput,
+  input: output.input,
+  publicKey: output.publicKey
+});
+
+if (!messageResult.valid) {
+  console.error("Message verification failed:", messageResult.errors);
+  
+  // Handle specific errors
+  if (messageResult.errors.includes("message_expired")) {
+    // The message has expired - ask user to sign in again
+  }
+  if (messageResult.errors.includes("message_domain_mismatch")) {
+    // The domain doesn't match - possible phishing attempt
+  }
+  if (messageResult.errors.includes("message_nonce_mismatch")) {
+    // The nonce doesn't match - possible replay attack
+  }
+}
+```
+
+## Error Handling Best Practices
+
+### Security-Critical Errors
+
+Some errors indicate potential security issues and should be handled with extra care:
+
+- **`message_domain_mismatch`**: This could indicate a phishing attempt where a malicious site is trying to use a signature from another domain.
+- **`invalid_signature`**: The signature doesn't match, indicating possible tampering with the message.
+- **`invalid_auth_key`**: The account's authentication key doesn't match the provided public key.
+- **`message_nonce_mismatch`**: Could indicate a replay attack where an old signature is being reused.
+
+### Time-Based Errors
+
+These errors are related to message validity periods:
+
+- **`message_expired`**: The message has passed its expiration time. The user should be prompted to sign in again.
+- **`message_not_yet_valid`**: The message's "not before" time hasn't been reached yet. This is unusual and could indicate clock synchronization issues.
+
+### User-Facing Error Messages
+
+When displaying errors to users, consider providing helpful messages:
+
+```tsx
+function getUserFriendlyError(errors: VerificationError[]): string {
+  if (errors.includes("message_expired")) {
+    return "Your sign-in request has expired. Please try signing in again.";
+  }
+  if (errors.includes("invalid_signature")) {
+    return "Signature verification failed. Please try signing in again.";
+  }
+  if (errors.includes("message_domain_mismatch")) {
+    return "Security error: Domain mismatch detected. Please ensure you're on the correct website.";
+  }
+  // Default message
+  return "Sign-in verification failed. Please try again.";
+}
+```
+
+## Type Definitions
+
+The error types are exported from the package and can be used for type-safe error handling:
+
+```tsx
+import type {
+  VerificationError,
+  VerificationComparisonError,
+  VerificationSignatureError,
+  VerificationMessageError,
+  VerificationResult
+} from "@aptos-labs/siwa";
+
+// Use in your code for type safety
+function handleVerificationResult(result: VerificationResult) {
+  if (!result.valid) {
+    result.errors.forEach((error: VerificationError) => {
+      // TypeScript knows about all possible error codes
+      console.error(error);
+    });
+  }
+}
+```
+
+## Related Functions
+
+- [`verifySignInMessage`](/docs/ts-aptos-labs-siwa/reference/verify-sign-in-message) - Verifies the SIWA message fields
+- [`verifySignInSignature`](/docs/ts-aptos-labs-siwa/reference/verify-sign-in-signature) - Verifies the cryptographic signature
