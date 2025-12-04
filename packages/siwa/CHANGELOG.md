@@ -1,5 +1,11 @@
 # @aptos-labs/siwa
 
+## 0.5.0
+
+### Minor Changes
+
+- 75ef107: Make serializers async and add support for x-chain public keys. Deprecate old serialization versions without reverse compatibility.
+
 ## 0.4.0
 
 ### Minor Changes
