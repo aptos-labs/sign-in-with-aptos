@@ -6,12 +6,12 @@ import {
   isValidPublicKeyScheme,
 } from "../utils.js";
 
-export const CURRENT_LEGACY_SERIALIZATION_VERSION = "1";
+export const CURRENT_LEGACY_SERIALIZATION_VERSION = "2";
 
-export type LegacySerializationVersion = "1";
+export type LegacySerializationVersion = "2";
 
 export type SerializedLegacyAptosSignInOutput = {
-  version: "1";
+  version: "2";
   type: string;
   signature: string;
   message: string;
@@ -19,7 +19,7 @@ export type SerializedLegacyAptosSignInOutput = {
 };
 
 export type DeserializedLegacyAptosSignInOutput = {
-  version: "1";
+  version: "2";
   type: string;
   signature: Signature;
   message: string;
@@ -38,24 +38,24 @@ export const serializeLegacySignInOutput = (
   publicKey: output.account.publicKey.bcsToHex().toString(),
 });
 
-export const deserializeLegacySignInOutput = (
+export const deserializeLegacySignInOutput = async (
   serialized: SerializedLegacyAptosSignInOutput,
-): DeserializedLegacyAptosSignInOutput => {
+): Promise<DeserializedLegacyAptosSignInOutput> => {
   const { version } = serialized;
 
-  if (version === "1") {
+  if (version === "2") {
     if (!isValidPublicKeyScheme(serialized.type)) {
       throw new Error(`Unexpected public key scheme: ${serialized.type}`);
     }
 
     return {
-      version: "1",
+      version: "2",
       type: serialized.type,
-      signature: deserializeSignInSignature(
+      signature: await deserializeSignInSignature(
         serialized.type,
         serialized.signature,
       ),
-      publicKey: deserializeSignInPublicKey(
+      publicKey: await deserializeSignInPublicKey(
         serialized.type,
         serialized.publicKey,
       ),

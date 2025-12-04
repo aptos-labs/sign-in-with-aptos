@@ -7,20 +7,19 @@
     "url": "https://github.com/aptos-labs/sign-in-with-aptos.git",
     "directory": "packages/siwa"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./legacy": {
       "types": "./dist/legacy/index.d.ts",
-      "import": "./dist/legacy/index.js",
-      "require": "./dist/legacy/index.cjs"
+      "import": "./dist/legacy/index.mjs",
+      "require": "./dist/legacy/index.js"
     }
   },
   "sideEffects": false,
@@ -43,17 +42,30 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@aptos-labs/wallet-standard": ">=0.5.0",
-    "@noble/hashes": "^1.7.1"
+    "@aptos-labs/wallet-standard": "^0.5.2",
+    "@noble/hashes": "^1.8.0"
   },
   "peerDependencies": {
-    "@aptos-labs/ts-sdk": ">=1.37.0 || >=2.0.0"
+    "@aptos-labs/derived-wallet-ethereum": ">=0.8.2",
+    "@aptos-labs/derived-wallet-solana": ">=0.8.2",
+    "@aptos-labs/ts-sdk": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@aptos-labs/derived-wallet-solana": {
+      "optional": true
+    },
+    "@aptos-labs/derived-wallet-ethereum": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "@aptos-labs/ts-sdk": "^2.0.0",
-    "dotenv": "^16.5.0",
-    "tsup": "^8.4.0",
-    "typescript": "^5.7.3"
+    "@aptos-labs/derived-wallet-ethereum": "^0.8.2",
+    "@aptos-labs/derived-wallet-solana": "^0.8.2",
+    "@aptos-labs/ts-sdk": "^5.1.5",
+    "@solana/web3.js": "^1.98.4",
+    "dotenv": "^16.6.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   },
   "keywords": [
     "aptos",

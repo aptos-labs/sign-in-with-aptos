@@ -38,7 +38,7 @@ export default function ConnectButton({ ...props }: ConnectButtonProps) {
           account: account,
           message: output.fullMessage,
           signature: output.signature,
-          type: getSignInPublicKeyScheme(account.publicKey),
+          type: await getSignInPublicKeyScheme(account.publicKey),
         });
         queryClient.invalidateQueries({ queryKey: ["user"] });
       } catch (error) {

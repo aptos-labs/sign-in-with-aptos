@@ -36,8 +36,15 @@ auth.post(
     "json",
     z.object({
       output: z.object({
-        version: z.enum(["2"]),
-        type: z.enum(["ed25519", "multi_ed25519", "single_key", "multi_key"]),
+        version: z.enum(["3"]),
+        type: z.enum([
+          "ed25519",
+          "multi_ed25519",
+          "single_key",
+          "multi_key",
+          "solana_derived",
+          "ethereum_derived",
+        ]),
         signature: z.string(),
         publicKey: z.string(),
         input: z.object({
@@ -58,7 +65,7 @@ auth.post(
     const expectedInput = getCookie(c, "siwa-input");
     if (!expectedInput) return c.json({ error: "input_not_found" }, 400);
 
-    const deserializedOutput = deserializeSignInOutput(output);
+    const deserializedOutput = await deserializeSignInOutput(output);
 
     const signatureVerification =
       await verifySignInSignature(deserializedOutput);

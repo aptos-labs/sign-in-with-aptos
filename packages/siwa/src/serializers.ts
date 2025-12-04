@@ -10,12 +10,12 @@ import {
   isValidPublicKeyScheme,
 } from "./utils.js";
 
-export const CURRENT_SERIALIZATION_VERSION = "2";
+export const CURRENT_SERIALIZATION_VERSION = "3";
 
-export type SerializationVersion = "2";
+export type SerializationVersion = "3";
 
 export type SerializedAptosSignInOutput = {
-  version: "2";
+  version: "3";
   type: string;
   signature: string;
   input: AptosSignInInput & AptosSignInBoundFields;
@@ -23,7 +23,7 @@ export type SerializedAptosSignInOutput = {
 };
 
 export type DeserializedAptosSignInOutput = {
-  version: "2";
+  version: "3";
   type: string;
   signature: Signature;
   input: AptosSignInInput & AptosSignInBoundFields;
@@ -54,25 +54,25 @@ export const serializeSignInOutput = (
  * @param serialized - The `SerializedAptosSignInOutput` to deserialize.
  * @returns The deserialized `AptosSignInOutput`.
  */
-export const deserializeSignInOutput = (
+export const deserializeSignInOutput = async (
   serialized: SerializedAptosSignInOutput,
-): DeserializedAptosSignInOutput => {
+): Promise<DeserializedAptosSignInOutput> => {
   const { version } = serialized;
 
-  if (version === "2") {
+  if (version === "3") {
     if (!isValidPublicKeyScheme(serialized.type)) {
       throw new Error(`Unexpected public key scheme: ${serialized.type}`);
     }
 
     return {
-      version: "2",
+      version: "3",
       type: serialized.type,
-      signature: deserializeSignInSignature(
+      signature: await deserializeSignInSignature(
         serialized.type,
         serialized.signature,
       ),
       input: serialized.input,
-      publicKey: deserializeSignInPublicKey(
+      publicKey: await deserializeSignInPublicKey(
         serialized.type,
         serialized.publicKey,
       ),

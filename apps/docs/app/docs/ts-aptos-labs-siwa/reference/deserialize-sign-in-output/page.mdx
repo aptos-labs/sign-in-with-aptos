@@ -9,7 +9,7 @@ import { deserializeSignInOutput, type SerializedAptosSignInOutput } from "@apto
 
 const serializedOutput: SerializedAptosSignInOutput = // ... response from the `serializeSignInOutput` function
 
-const deserialized = deserializeSignInOutput(serializedOutput); // // { version: "2", type: "ed25519", signature: Ed25519Signature, publicKey: Ed25519PublicKey, input: {...} }
+const deserialized = await deserializeSignInOutput(serializedOutput); // // { version: "2", type: "ed25519", signature: Ed25519Signature, publicKey: Ed25519PublicKey, input: {...} }
 ```
 
 ## Specifications

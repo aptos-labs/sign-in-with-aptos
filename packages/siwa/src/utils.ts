@@ -25,12 +25,20 @@ import { encodeBase64 } from "./internal.js";
  */
 export const isValidPublicKeyScheme = (
   scheme: string,
-): scheme is "ed25519" | "multi_ed25519" | "single_key" | "multi_key" => {
+): scheme is
+  | "ed25519"
+  | "multi_ed25519"
+  | "single_key"
+  | "multi_key"
+  | "solana_derived"
+  | "ethereum_derived" => {
   return (
     scheme === "ed25519" ||
     scheme === "multi_ed25519" ||
     scheme === "single_key" ||
-    scheme === "multi_key"
+    scheme === "multi_key" ||
+    scheme === "solana_derived" ||
+    scheme === "ethereum_derived"
   );
 };
 
@@ -41,9 +49,9 @@ export const isValidPublicKeyScheme = (
  *
  * @returns The signing scheme of the public key.
  */
-export function getSignInPublicKeyScheme(
+export async function getSignInPublicKeyScheme(
   value: SigningScheme | PublicKey,
-): string {
+): Promise<string> {
   // If the value is a PublicKey
   if (typeof value === "object") {
     if (Ed25519PublicKey.isInstance(value)) {
@@ -57,6 +65,22 @@ export function getSignInPublicKeyScheme(
     }
     if (value instanceof MultiEd25519PublicKey) {
       return "multi_ed25519";
+    }
+    if (await isModuleAvailable("@aptos-labs/derived-wallet-solana")) {
+      const { SolanaDerivedPublicKey } = await import(
+        "@aptos-labs/derived-wallet-solana"
+      );
+      if (SolanaDerivedPublicKey.isInstance(value)) {
+        return "solana_derived";
+      }
+    }
+    if (await isModuleAvailable("@aptos-labs/derived-wallet-ethereum")) {
+      const { EIP1193DerivedPublicKey } = await import(
+        "@aptos-labs/derived-wallet-ethereum"
+      );
+      if (EIP1193DerivedPublicKey.isInstance(value)) {
+        return "ethereum_derived";
+      }
     }
     throw new Error(`Unknown public key type for instance: ${value}`);
   }
@@ -84,15 +108,17 @@ export function getSignInPublicKeyScheme(
  *
  * @returns The deserialized public key.
  */
-export function deserializeSignInPublicKey(
+export async function deserializeSignInPublicKey(
   scheme:
     | SigningScheme
     | "ed25519"
     | "multi_ed25519"
     | "single_key"
-    | "multi_key",
+    | "multi_key"
+    | "solana_derived"
+    | "ethereum_derived",
   value: HexInput,
-): PublicKey {
+): Promise<PublicKey> {
   const deserializer = new Deserializer(Hex.fromHexInput(value).toUint8Array());
 
   if (typeof scheme !== "string") {
@@ -122,6 +148,24 @@ export function deserializeSignInPublicKey(
       return AnyPublicKey.deserialize(deserializer);
     case "multi_key":
       return MultiKey.deserialize(deserializer);
+    case "solana_derived": {
+      if (!(await isModuleAvailable("@aptos-labs/derived-wallet-solana"))) {
+        throw new Error("Solana derived public key is not supported");
+      }
+      const { SolanaDerivedPublicKey } = await import(
+        "@aptos-labs/derived-wallet-solana"
+      );
+      return SolanaDerivedPublicKey.deserialize(deserializer);
+    }
+    case "ethereum_derived": {
+      if (!(await isModuleAvailable("@aptos-labs/derived-wallet-ethereum"))) {
+        throw new Error("Ethereum derived public key is not supported");
+      }
+      const { EIP1193DerivedPublicKey } = await import(
+        "@aptos-labs/derived-wallet-ethereum"
+      );
+      return EIP1193DerivedPublicKey.deserialize(deserializer);
+    }
     default:
       throw new Error(`Unknown public key type: ${scheme}`);
   }
@@ -135,15 +179,17 @@ export function deserializeSignInPublicKey(
  *
  * @returns The deserialized signature.
  */
-export function deserializeSignInSignature(
+export async function deserializeSignInSignature(
   scheme:
     | SigningScheme
     | "ed25519"
     | "multi_ed25519"
     | "single_key"
-    | "multi_key",
+    | "multi_key"
+    | "solana_derived"
+    | "ethereum_derived",
   value: HexInput,
-): Signature {
+): Promise<Signature> {
   const deserializer = new Deserializer(Hex.fromHexInput(value).toUint8Array());
 
   if (typeof scheme !== "string") {
@@ -170,6 +216,17 @@ export function deserializeSignInSignature(
       return AnySignature.deserialize(deserializer);
     case "multi_key":
       return MultiKeySignature.deserialize(deserializer);
+    case "solana_derived":
+      return Ed25519Signature.deserialize(deserializer);
+    case "ethereum_derived": {
+      if (!(await isModuleAvailable("@aptos-labs/derived-wallet-ethereum"))) {
+        throw new Error("Ethereum derived signature is not supported");
+      }
+      const { EIP1193PersonalSignature } = await import(
+        "@aptos-labs/derived-wallet-ethereum"
+      );
+      return EIP1193PersonalSignature.deserialize(deserializer);
+    }
     default:
       throw new Error(`Unknown signature type: ${scheme}`);
   }
@@ -185,3 +242,14 @@ export function generateNonce(): string {
   crypto.getRandomValues(bytes);
   return encodeBase64(bytes);
 }
+
+/**
+ * Check if a module is available.
+ *
+ * @param mod The module to check.
+ *
+ * @returns True if the module is available, false otherwise.
+ */
+const isModuleAvailable = async (mod: string) => {
+  return import(mod).then(() => true).catch(() => false);
+};

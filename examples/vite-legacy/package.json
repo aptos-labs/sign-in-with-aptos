@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@aptos-labs/siwa": "workspace:*",
-    "@aptos-labs/ts-sdk": "^2.0.0",
-    "@aptos-labs/wallet-adapter-react": "^7.0.1",
+    "@aptos-labs/ts-sdk": "^5.0.0",
+    "@aptos-labs/wallet-adapter-react": "^7.2.2",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-collapsible": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.14",

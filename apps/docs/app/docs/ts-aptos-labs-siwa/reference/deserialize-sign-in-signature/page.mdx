@@ -13,15 +13,15 @@ const originalSignature = new Ed25519Signature(new Uint8Array(64));
 const serializedHex = originalSignature.bcsToHex().toString();
 
 // Deserialize using scheme string
-const deserializedSig1 = deserializeSignInSignature("ed25519", serializedHex);
+const deserializedSig1 = await deserializeSignInSignature("ed25519", serializedHex);
 
 // Deserialize using SigningScheme enum
 import { SigningScheme } from "@aptos-labs/ts-sdk";
-const deserializedSig2 = deserializeSignInSignature(SigningScheme.Ed25519, serializedHex);
+const deserializedSig2 = await deserializeSignInSignature(SigningScheme.Ed25519, serializedHex);
 
 // Other schemes
 const singleSigHex = "0x1234567890abcdef..."; // serialized AnySignature
-const singleSig = deserializeSignInSignature("single_key", singleSigHex);
+const singleSig = await deserializeSignInSignature("single_key", singleSigHex);
 ```
 
 ## Specifications

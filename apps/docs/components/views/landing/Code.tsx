@@ -43,7 +43,7 @@ auth.post(
     const expectedInput = getCookie(c, "siwa-input");
     if (!expectedInput) return c.json({ error: "input_not_found" }, 400);
 
-    const deserializedOutput = deserializeSignInOutput(output);
+    const deserializedOutput = await deserializeSignInOutput(output);
 
     const signatureVerification = await verifySignInSignature(deserializedOutput);
 

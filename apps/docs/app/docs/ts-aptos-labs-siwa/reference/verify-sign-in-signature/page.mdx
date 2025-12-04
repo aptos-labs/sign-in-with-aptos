@@ -10,7 +10,7 @@ import { verifySignInSignature, deserializeSignInOutput, type SerializedAptosSig
 
 const serializedOutput: SerializedAptosSignInOutput = // ... response from the `serializeSignInOutput` function
 
-const output = deserializeSignInOutput(serializedOutput);
+const output = await deserializeSignInOutput(serializedOutput);
 
 // Verify the signature matches the message
 const result = await verifySignInSignature({

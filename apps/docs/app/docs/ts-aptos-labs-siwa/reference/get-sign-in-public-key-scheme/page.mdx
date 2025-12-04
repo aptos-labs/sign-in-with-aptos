@@ -10,13 +10,13 @@ import { Ed25519PublicKey, AnyPublicKey, SigningScheme } from "@aptos-labs/ts-sd
 
 // From a PublicKey instance
 const ed25519Key = new Ed25519PublicKey(new Uint8Array(32));
-const scheme1 = getSignInPublicKeyScheme(ed25519Key); // "ed25519"
+const scheme1 = await getSignInPublicKeyScheme(ed25519Key); // "ed25519"
 
 const singleKey = new AnyPublicKey(ed25519Key);
-const scheme2 = getSignInPublicKeyScheme(singleKey); // "single_key"
+const scheme2 = await getSignInPublicKeyScheme(singleKey); // "single_key"
 
 // From a SigningScheme enum
-const scheme3 = getSignInPublicKeyScheme(SigningScheme.Ed25519); // "ed25519"
+const scheme3 = await getSignInPublicKeyScheme(SigningScheme.Ed25519); // "ed25519"
 ```
 
 ## Specifications
