@@ -1,33 +1,33 @@
 import type { PublicKey, Signature } from "@aptos-labs/ts-sdk";
 import type {
-  AptosSignInBoundFields,
-  AptosSignInInput,
-  AptosSignInOutput,
+	AptosSignInBoundFields,
+	AptosSignInInput,
+	AptosSignInOutput,
 } from "@aptos-labs/wallet-standard";
 import {
-  deserializeSignInPublicKey,
-  deserializeSignInSignature,
-  isValidPublicKeyScheme,
+	deserializeSignInPublicKey,
+	deserializeSignInSignature,
+	isValidPublicKeyScheme,
 } from "./utils.js";
 
-export const CURRENT_SERIALIZATION_VERSION = "2";
+export const CURRENT_SERIALIZATION_VERSION = "3";
 
-export type SerializationVersion = "2";
+export type SerializationVersion = "3";
 
 export type SerializedAptosSignInOutput = {
-  version: "2";
-  type: string;
-  signature: string;
-  input: AptosSignInInput & AptosSignInBoundFields;
-  publicKey: string;
+	version: "3";
+	type: string;
+	signature: string;
+	input: AptosSignInInput & AptosSignInBoundFields;
+	publicKey: string;
 };
 
 export type DeserializedAptosSignInOutput = {
-  version: "2";
-  type: string;
-  signature: Signature;
-  input: AptosSignInInput & AptosSignInBoundFields;
-  publicKey: PublicKey;
+	version: "3";
+	type: string;
+	signature: Signature;
+	input: AptosSignInInput & AptosSignInBoundFields;
+	publicKey: PublicKey;
 };
 
 /**
@@ -38,13 +38,13 @@ export type DeserializedAptosSignInOutput = {
  * @returns The serialized `AptosSignInOutput`.
  */
 export const serializeSignInOutput = (
-  output: Pick<AptosSignInOutput, "type" | "signature" | "input" | "account">,
+	output: Pick<AptosSignInOutput, "type" | "signature" | "input" | "account">,
 ): SerializedAptosSignInOutput => ({
-  version: CURRENT_SERIALIZATION_VERSION,
-  type: output.type,
-  signature: output.signature.bcsToHex().toString(),
-  input: output.input,
-  publicKey: output.account.publicKey.bcsToHex().toString(),
+	version: CURRENT_SERIALIZATION_VERSION,
+	type: output.type,
+	signature: output.signature.bcsToHex().toString(),
+	input: output.input,
+	publicKey: output.account.publicKey.bcsToHex().toString(),
 });
 
 /**
@@ -54,30 +54,30 @@ export const serializeSignInOutput = (
  * @param serialized - The `SerializedAptosSignInOutput` to deserialize.
  * @returns The deserialized `AptosSignInOutput`.
  */
-export const deserializeSignInOutput = (
-  serialized: SerializedAptosSignInOutput,
-): DeserializedAptosSignInOutput => {
-  const { version } = serialized;
+export const deserializeSignInOutput = async (
+	serialized: SerializedAptosSignInOutput,
+): Promise<DeserializedAptosSignInOutput> => {
+	const { version } = serialized;
 
-  if (version === "2") {
-    if (!isValidPublicKeyScheme(serialized.type)) {
-      throw new Error(`Unexpected public key scheme: ${serialized.type}`);
-    }
+	if (version === "3") {
+		if (!isValidPublicKeyScheme(serialized.type)) {
+			throw new Error(`Unexpected public key scheme: ${serialized.type}`);
+		}
 
-    return {
-      version: "2",
-      type: serialized.type,
-      signature: deserializeSignInSignature(
-        serialized.type,
-        serialized.signature,
-      ),
-      input: serialized.input,
-      publicKey: deserializeSignInPublicKey(
-        serialized.type,
-        serialized.publicKey,
-      ),
-    };
-  }
+		return {
+			version: "3",
+			type: serialized.type,
+			signature: await deserializeSignInSignature(
+				serialized.type,
+				serialized.signature,
+			),
+			input: serialized.input,
+			publicKey: await deserializeSignInPublicKey(
+				serialized.type,
+				serialized.publicKey,
+			),
+		};
+	}
 
-  throw new Error(`Unexpected serialization version: ${version}`);
+	throw new Error(`Unexpected serialization version: ${version}`);
 };

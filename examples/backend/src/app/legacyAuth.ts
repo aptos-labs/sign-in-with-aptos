@@ -49,8 +49,15 @@ legacyAuth.post(
     "json",
     z.object({
       output: z.object({
-        version: z.enum(["1"]),
-        type: z.enum(["ed25519", "multi_ed25519", "single_key", "multi_key"]),
+        version: z.enum(["2"]),
+        type: z.enum([
+          "ed25519",
+          "multi_ed25519",
+          "single_key",
+          "multi_key",
+          "solana_derived",
+          "ethereum_derived",
+        ]),
         signature: z.string(),
         message: z.string(),
         publicKey: z.string(),
@@ -63,7 +70,7 @@ legacyAuth.post(
     const input = getCookie(c, "siwa-input");
     if (!input) return c.json({ error: "input_not_found" }, 400);
 
-    const deserializedOutput = deserializeLegacySignInOutput(output);
+    const deserializedOutput = await deserializeLegacySignInOutput(output);
 
     const verification = await verifyLegacySignIn(
       JSON.parse(input) as AptosSignInInput & AptosSignInBoundFields,

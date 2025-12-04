@@ -127,7 +127,7 @@ const app = new Hono();
 app.post("/auth/siwa/verify", (c) => {
   const { output } = c.req.json();
 
-  const deserializedOutput = deserializeSignInOutput(output);
+  const deserializedOutput = await deserializeSignInOutput(output);
 
   const signatureVerification = verifySignInSignature(deserializedOutput);
 

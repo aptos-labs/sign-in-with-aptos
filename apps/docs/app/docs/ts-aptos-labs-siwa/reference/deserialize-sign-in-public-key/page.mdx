@@ -13,14 +13,14 @@ const originalKey = new Ed25519PublicKey(new Uint8Array(32));
 const serializedHex = originalKey.bcsToHex().toString();
 
 // Deserialize using scheme string
-const deserializedKey1 = deserializeSignInPublicKey("ed25519", serializedHex);
+const deserializedKey1 = await deserializeSignInPublicKey("ed25519", serializedHex);
 
 // Deserialize using SigningScheme enum
-const deserializedKey2 = deserializeSignInPublicKey(SigningScheme.Ed25519, serializedHex);
+const deserializedKey2 = await deserializeSignInPublicKey(SigningScheme.Ed25519, serializedHex);
 
 // Other schemes
 const singleKeyHex = "0x1234567890abcdef..."; // serialized AnyPublicKey
-const singleKey = deserializeSignInPublicKey("single_key", singleKeyHex);
+const singleKey = await deserializeSignInPublicKey("single_key", singleKeyHex);
 ```
 
 ## Specifications
