@@ -1,5 +1,11 @@
 # @aptos-labs/siwa
 
+## 0.5.1
+
+### Patch Changes
+
+- aa36448: Add vite and webpack ignore when dynamically importing x-chain dependencies.
+
 ## 0.5.0
 
 ### Minor Changes
