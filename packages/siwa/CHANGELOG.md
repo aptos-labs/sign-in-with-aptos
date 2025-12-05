@@ -1,5 +1,11 @@
 # @aptos-labs/siwa
 
+## 0.5.2
+
+### Patch Changes
+
+- de6de19: Force signing message bytes conversion
+
 ## 0.5.1
 
 ### Patch Changes
