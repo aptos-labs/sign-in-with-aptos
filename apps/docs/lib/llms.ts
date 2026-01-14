@@ -53,7 +53,7 @@ function parseMdxFile(content: string): {
  */
 function extractTitle(
   frontmatter: Record<string, string>,
-  body: string
+  body: string,
 ): string {
   if (frontmatter.title) {
     return frontmatter.title;
