@@ -1,0 +1,44 @@
+# Sign in with Aptos (SIWA)
+
+> Authenticate users securely using their Aptos account. A standardized authentication protocol for Aptos accounts that replaces the traditional connect + signMessage flow with a streamlined one-click signIn method.
+
+The "Sign in with Aptos" (SIWA) standard introduces a secure and user-friendly way for users to authenticate to off-chain resources by proving ownership of their Aptos account. SIWA leverages Aptos accounts to avoid reliance on traditional schemes like SSO while incorporating security measures to combat phishing attacks and improve user visibility.
+
+## Documentation
+
+- [Introduction](/docs): Overview of SIWA, motivation, and the proposed solution
+- [Wallet Integrations](/docs/wallet-integrations): List of wallets supporting SIWA
+
+## @aptos-labs/siwa Package
+
+- [Quick Start](/docs/ts-aptos-labs-siwa/quick-start): Getting started with the @aptos-labs/siwa package
+
+### API Reference
+
+- [createSignInMessage](/docs/ts-aptos-labs-siwa/reference/create-sign-in-message): Creates a human readable SIWA message
+- [createSignInSigningMessage](/docs/ts-aptos-labs-siwa/reference/create-sign-in-signing-message): Creates a signing message for SIWA
+- [verifySignInMessage](/docs/ts-aptos-labs-siwa/reference/verify-sign-in-message): Verifies an AptosSignInInput against expected values
+- [verifySignInSignature](/docs/ts-aptos-labs-siwa/reference/verify-sign-in-signature): Verifies the signature is valid
+- [generateNonce](/docs/ts-aptos-labs-siwa/reference/generate-nonce): Generates a randomized nonce for replay attack prevention
+- [serializeSignInOutput](/docs/ts-aptos-labs-siwa/reference/serialize-sign-in-output): Serializes AptosSignInOutput for transfer
+- [deserializeSignInOutput](/docs/ts-aptos-labs-siwa/reference/deserialize-sign-in-output): Deserializes a SerializedAptosSignInOutput
+- [deserializeSignInPublicKey](/docs/ts-aptos-labs-siwa/reference/deserialize-sign-in-public-key): Deserializes a public key
+- [deserializeSignInSignature](/docs/ts-aptos-labs-siwa/reference/deserialize-sign-in-signature): Deserializes a signature
+- [getSignInPublicKeyScheme](/docs/ts-aptos-labs-siwa/reference/get-sign-in-public-key-scheme): Gets the public key scheme
+- [isValidPublicKeyScheme](/docs/ts-aptos-labs-siwa/reference/is-valid-public-key-scheme): Validates a public key scheme
+
+## @aptos-labs/wallet-adapter-react Package
+
+- [Quick Start](/docs/ts-aptos-labs-wallet-adapter-react/quick-start): Getting started with wallet adapter integration
+- [Auto Connect](/docs/ts-aptos-labs-wallet-adapter-react/auto-connect): Automatic wallet connection with SIWA
+- [Wallet Compatibility](/docs/ts-aptos-labs-wallet-adapter-react/wallet-compatibility): Checking wallet support for SIWA
+
+## External Resources
+
+- [AIP-116](https://github.com/aptos-foundation/AIPs/blob/main/aips/aip-116.md): Aptos Improvement Proposal for SIWA
+- [GitHub Repository](https://github.com/aptos-labs/sign-in-with-aptos): Source code and examples
+- [Wallet Adapter Documentation](https://aptos.dev/en/build/sdks/wallet-adapter/dapp): Official Aptos wallet adapter docs
+
+## Optional: llms-full.txt
+
+For a more comprehensive version with full page content, see [llms-full.txt](/llms-full.txt)
