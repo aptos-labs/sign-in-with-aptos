@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import matter from "gray-matter";
 
 interface DocPage {
   slug: string;
@@ -17,35 +18,33 @@ interface DocSection {
 const DOCS_DIR = path.join(process.cwd(), "app/docs");
 
 /**
- * Extract frontmatter and content from MDX file
+ * JSX components to remove from content (with their children)
+ * Add new components here as they are used in documentation
+ */
+const JSX_COMPONENTS_TO_REMOVE = ["Steps", "TSDoc", "Callout"];
+
+/**
+ * Extract frontmatter and content from MDX file using gray-matter
  */
 function parseMdxFile(content: string): {
   frontmatter: Record<string, string>;
   body: string;
 } {
-  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
-
-  if (frontmatterMatch) {
-    const frontmatterStr = frontmatterMatch[1];
+  try {
+    const parsed = matter(content);
+    // Convert frontmatter values to strings for consistency
     const frontmatter: Record<string, string> = {};
-
-    for (const line of frontmatterStr.split("\n")) {
-      const [key, ...valueParts] = line.split(":");
-      if (key && valueParts.length > 0) {
-        frontmatter[key.trim()] = valueParts
-          .join(":")
-          .trim()
-          .replace(/^["']|["']$/g, "");
-      }
+    for (const [key, value] of Object.entries(parsed.data)) {
+      frontmatter[key] = String(value);
     }
-
     return {
       frontmatter,
-      body: content.slice(frontmatterMatch[0].length).trim(),
+      body: parsed.content.trim(),
     };
+  } catch {
+    // Fallback if gray-matter fails
+    return { frontmatter: {}, body: content };
   }
-
-  return { frontmatter: {}, body: content };
 }
 
 /**
@@ -79,7 +78,7 @@ function extractDescription(body: string): string | undefined {
     .trim();
 
   // Find first paragraph after heading
-  const lines = cleanedBody.split("\n").filter((line) => line.trim());
+  const lines = cleanedBody.split(/\r?\n/).filter((line) => line.trim());
   for (const line of lines) {
     const trimmed = line.trim();
     if (
@@ -100,13 +99,19 @@ function extractDescription(body: string): string | undefined {
  * Clean MDX content for plain text output
  */
 function cleanMdxContent(content: string): string {
+  // Build regex patterns from the component list
+  const componentsPattern = JSX_COMPONENTS_TO_REMOVE.join("|");
+
   return (
     content
       // Remove import statements
       .replace(/^import\s+.*$/gm, "")
-      // Remove JSX/TSX components like <Steps>, <TSDoc>, etc.
-      .replace(/<(Steps|TSDoc|Callout)[^>]*>[\s\S]*?<\/\1>/g, "")
-      .replace(/<(Steps|TSDoc|Callout)[^>]*\/>/g, "")
+      // Remove JSX/TSX components with their content
+      .replace(
+        new RegExp(`<(${componentsPattern})[^>]*>[\\s\\S]*?<\\/\\1>`, "g"),
+        "",
+      )
+      .replace(new RegExp(`<(${componentsPattern})[^>]*\\/>`, "g"), "")
       // Remove self-closing JSX tags
       .replace(/<[A-Z][a-zA-Z]*[^>]*\/>/g, "")
       // Remove JSX component wrappers but keep content
@@ -117,6 +122,35 @@ function cleanMdxContent(content: string): string {
       .replace(/\n{3,}/g, "\n\n")
       .trim()
   );
+}
+
+/**
+ * Determine section from path parts
+ */
+function getSectionFromPath(pathParts: string[]): string {
+  if (pathParts.length === 0 || pathParts[0] === "") {
+    return "Overview";
+  }
+
+  if (pathParts[0] === "ts-aptos-labs-siwa") {
+    return pathParts[1] === "reference"
+      ? "@aptos-labs/siwa API Reference"
+      : "@aptos-labs/siwa";
+  }
+
+  if (pathParts[0] === "ts-aptos-labs-wallet-adapter-react") {
+    return "@aptos-labs/wallet-adapter-react";
+  }
+
+  if (pathParts[0] === "ts-aptos-labs-wallet-standard") {
+    return "@aptos-labs/wallet-standard";
+  }
+
+  if (pathParts[0] === "wallet-integrations") {
+    return "Support";
+  }
+
+  return "Overview";
 }
 
 /**
@@ -146,21 +180,9 @@ function readMdxFiles(dir: string, basePath = ""): DocPage[] {
       const title = extractTitle(frontmatter, body);
       const description = extractDescription(body);
 
-      // Determine section from path
-      const pathParts = basePath.split("/");
-      let section = "Overview";
-      if (pathParts[0] === "ts-aptos-labs-siwa") {
-        section =
-          pathParts[1] === "reference"
-            ? "@aptos-labs/siwa API Reference"
-            : "@aptos-labs/siwa";
-      } else if (pathParts[0] === "ts-aptos-labs-wallet-adapter-react") {
-        section = "@aptos-labs/wallet-adapter-react";
-      } else if (pathParts[0] === "ts-aptos-labs-wallet-standard") {
-        section = "@aptos-labs/wallet-standard";
-      } else if (pathParts[0] === "wallet-integrations") {
-        section = "Support";
-      }
+      // Determine section from path - handle empty basePath correctly
+      const pathParts = basePath ? basePath.split("/") : [];
+      const section = getSectionFromPath(pathParts);
 
       pages.push({
         slug: basePath || "index",
