@@ -1,4 +1,9 @@
-export const tryImportDerivedWalletSolana = async () => {
+type DerivedWalletSolanaModule = typeof import("@aptos-labs/derived-wallet-solana");
+type DerivedWalletEthereumModule = typeof import("@aptos-labs/derived-wallet-ethereum");
+
+export const tryImportDerivedWalletSolana = async (): Promise<
+  DerivedWalletSolanaModule | null
+> => {
   try {
     return await import(
       /* webpackIgnore: true */ /* @vite-ignore */ "@aptos-labs/derived-wallet-solana"
@@ -8,7 +13,9 @@ export const tryImportDerivedWalletSolana = async () => {
   }
 };
 
-export const tryImportDerivedWalletEthereum = async () => {
+export const tryImportDerivedWalletEthereum = async (): Promise<
+  DerivedWalletEthereumModule | null
+> => {
   try {
     return await import(
       /* webpackIgnore: true */ /* @vite-ignore */ "@aptos-labs/derived-wallet-ethereum"
