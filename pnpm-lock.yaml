@@ -347,8 +347,8 @@ importers:
         specifier: ^0.8.5
         version: 0.8.5(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@aptos-labs/derived-wallet-solana':
-        specifier: ^0.8.2
-        version: 0.8.2(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)(bs58@4.0.1)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+        specifier: ^0.10.0
+        version: 0.10.0(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)(bs58@4.0.1)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@aptos-labs/ts-sdk':
         specifier: ^5.2.1
         version: 5.2.1(got@11.8.6)
@@ -416,18 +416,13 @@ packages:
     peerDependencies:
       '@aptos-labs/ts-sdk': ^5.1.1
 
-  '@aptos-labs/derived-wallet-base@0.8.2':
-    resolution: {integrity: sha512-uK/wqIvoAFuQWf4emdNqVLouET7xQ93My/+NK2B1cSJvPjmL2Dar3zCnWIYwNPnsLTUks8EPma9CUyzcBaKeAQ==}
-    peerDependencies:
-      '@aptos-labs/ts-sdk': ^5.1.1
-
   '@aptos-labs/derived-wallet-ethereum@0.8.5':
     resolution: {integrity: sha512-mV9cNOzfVSLr8HYMJ1UTrsxGgET/awou+QFY55jtydXD9efaGB3mCTi65Y4oQU8fe4TyF0NNFG9HTnzaZH3RLA==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^5.1.1
 
-  '@aptos-labs/derived-wallet-solana@0.8.2':
-    resolution: {integrity: sha512-155P3X6z7Elufh5N+e71aCVRFQ1UmK5py8Kf06lv6UhjWGWT6BL7Wej+OAyo0ql48DGGhzw5mhkIU4lULyW2AQ==}
+  '@aptos-labs/derived-wallet-solana@0.10.0':
+    resolution: {integrity: sha512-ANW+ACsddjEnXAzZzgSbWmYo+hqwLDP/OCfgdeosrkAx+gk2XRlKBxT4rp9NsiduA8j1Yf+VdZDIGZMs7M8Liw==}
     peerDependencies:
       '@aptos-labs/ts-sdk': ^5.1.1
 
@@ -5441,13 +5436,6 @@ snapshots:
     transitivePeerDependencies:
       - '@wallet-standard/core'
 
-  '@aptos-labs/derived-wallet-base@0.8.2(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)':
-    dependencies:
-      '@aptos-labs/ts-sdk': 5.2.1(got@11.8.6)
-      '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)
-    transitivePeerDependencies:
-      - '@wallet-standard/core'
-
   '@aptos-labs/derived-wallet-ethereum@0.8.5(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
     dependencies:
       '@aptos-labs/derived-wallet-base': 0.10.1(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)
@@ -5464,9 +5452,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@aptos-labs/derived-wallet-solana@0.8.2(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)(bs58@4.0.1)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)':
+  '@aptos-labs/derived-wallet-solana@0.10.0(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)(bs58@4.0.1)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@aptos-labs/derived-wallet-base': 0.8.2(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)
+      '@aptos-labs/derived-wallet-base': 0.10.1(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)
       '@aptos-labs/ts-sdk': 5.2.1(got@11.8.6)
       '@aptos-labs/wallet-standard': 0.5.2(@aptos-labs/ts-sdk@5.2.1(got@11.8.6))(@wallet-standard/core@1.0.3)
       '@solana/wallet-adapter-base': 0.9.27(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10))
@@ -7200,7 +7188,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 22.15.3
+      '@types/node': 25.0.9
       '@types/responselike': 1.0.3
 
   '@types/chai@5.2.3':
@@ -7353,7 +7341,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 22.15.3
+      '@types/node': 25.0.9
 
   '@types/mdast@4.0.4':
     dependencies:
@@ -7391,7 +7379,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 22.15.3
+      '@types/node': 25.0.9
 
   '@types/trusted-types@2.0.7':
     optional: true

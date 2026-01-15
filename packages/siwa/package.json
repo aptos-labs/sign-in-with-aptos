@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@aptos-labs/derived-wallet-ethereum": "^0.8.5",
-    "@aptos-labs/derived-wallet-solana": "^0.8.2",
+    "@aptos-labs/derived-wallet-solana": "^0.10.0",
     "@aptos-labs/ts-sdk": "^5.2.1",
     "@solana/web3.js": "^1.98.4",
     "dotenv": "^16.6.1",
