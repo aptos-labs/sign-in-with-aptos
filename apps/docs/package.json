@@ -23,7 +23,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
     "motion": "^12.26.2",
-    "next": "15.4.10",
+    "next": "16.1.5",
     "nextra": "4.3.0-alpha.31",
     "nextra-theme-docs": "4.3.0-alpha.31",
     "react": "^19.2.3",
