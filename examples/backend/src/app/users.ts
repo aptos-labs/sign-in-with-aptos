@@ -1,9 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
-import { invalidateSession, validateSessionToken } from "../lib/sessions.js";
 import { db, userTable } from "../db.js";
-import { eq } from "drizzle-orm";
+import { invalidateSession, validateSessionToken } from "../lib/sessions.js";
 
 const users = new Hono();
 

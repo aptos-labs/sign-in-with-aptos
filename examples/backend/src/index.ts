@@ -2,8 +2,8 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import auth from "./app/auth.js";
-import users from "./app/users.js";
 import legacyAuth from "./app/legacyAuth.js";
+import users from "./app/users.js";
 
 const app = new Hono();
 

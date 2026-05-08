@@ -17,7 +17,7 @@
     "vite-legacy-example": "turbo dev --filter=@aptos-labs/siwa-vite-legacy --filter=@aptos-labs/siwa-backend --ui tui"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.11",
+    "@biomejs/biome": "2.3.11",
     "@changesets/cli": "^2.29.8",
     "@types/node": "22.15.3",
     "@vitest/coverage-v8": "^3.2.4",

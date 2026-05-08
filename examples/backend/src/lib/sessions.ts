@@ -3,10 +3,10 @@ import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from "@oslojs/encoding";
-import { type User, type Session, sessionTable, userTable, db } from "../db.js";
 import { eq } from "drizzle-orm";
 import type { Context } from "hono";
 import { getCookie } from "hono/cookie";
+import { db, type Session, sessionTable, type User, userTable } from "../db.js";
 
 export function generateSessionToken(): string {
   const bytes = new Uint8Array(20);
