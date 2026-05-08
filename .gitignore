@@ -182,3 +182,6 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+
+#generated files
+apps/docs/types
