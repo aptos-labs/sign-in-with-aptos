@@ -1,5 +1,11 @@
 # @aptos-labs/siwa
 
+## 0.6.0
+
+### Minor Changes
+
+- Minor version bump
+
 ## 0.5.2
 
 ### Patch Changes

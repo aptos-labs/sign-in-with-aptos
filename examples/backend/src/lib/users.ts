@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { db, userTable, type User } from "../db.js";
+import { db, type User, userTable } from "../db.js";
 
 export async function getUserByAddress(address: string): Promise<User | null> {
   const selectedUser = await db
