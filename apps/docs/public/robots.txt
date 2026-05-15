@@ -4,4 +4,8 @@ Allow: /
 
 # Disallow crawling of certain paths
 Disallow: /api/
-Disallow: /_next/ 
+Disallow: /_next/
+
+# LLMS.txt - Documentation for Large Language Models
+# https://llmstxt.org/
+Sitemap: https://siwa.aptos.dev/llms.txt
