@@ -8,4 +8,4 @@ Disallow: /_next/
 
 # LLMS.txt - Documentation for Large Language Models
 # https://llmstxt.org/
-# LLMS.txt available at: https://siwa.aptos.dev/llms.txt
+Sitemap: https://siwa.aptos.dev/llms.txt
