@@ -17,7 +17,7 @@
     "@oslojs/encoding": "^1.1.0",
     "better-sqlite3": "^11.10.0",
     "drizzle-orm": "^0.45.2",
-    "hono": "^4.12.18",
+    "hono": "^4.12.25",
     "zod": "^3.25.76"
   },
   "devDependencies": {
