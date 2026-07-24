@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@aptos-labs/siwa": "workspace:*",
-    "@hono/node-server": "^1.19.14",
+    "@hono/node-server": "^2.0.10",
     "@hono/zod-validator": "^0.4.3",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
