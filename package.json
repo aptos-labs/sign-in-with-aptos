@@ -20,9 +20,9 @@
     "@biomejs/biome": "2.3.11",
     "@changesets/cli": "^2.29.8",
     "@types/node": "22.15.3",
-    "@vitest/coverage-v8": "^4.1.5",
-    "turbo": "^2.7.4",
-    "vitest": "^4.1.5"
+    "@vitest/coverage-v8": "^4.1.12",
+    "turbo": "^2.11.13",
+    "vitest": "^4.1.12"
   },
   "packageManager": "pnpm@10.12.3",
   "engines": {
@@ -40,22 +40,37 @@
       "utf-8-validate"
     ],
     "overrides": {
-      "brace-expansion@^2": "^2.0.3",
-      "minimatch@^9": "^9.0.7",
-      "minimatch@^10": "^10.2.3",
+      "brace-expansion@^2": "^2.1.8",
+      "brace-expansion@^5": "^5.1.0",
+      "minimatch@^9": "^9.0.9",
+      "minimatch@^10": "^11.0.9",
       "picomatch@^2": "^2.3.2",
       "picomatch@^4": "^4.0.4",
       "rollup@^4": "^4.59.0",
-      "axios": "^1.15.2",
-      "dompurify": "^3.4.0",
+      "axios": "^1.21.1",
+      "follow-redirects": "^1.16.3",
+      "form-data@^4": "^4.0.6",
+      "dompurify": "^3.5.0",
+      "uuid@^8": "^11.1.1",
+      "uuid@^9": "^11.1.1",
       "uuid@^11": "^11.1.1",
-      "postcss": "^8.5.10",
-      "vite": "^7.3.2",
+      "postcss": "^8.5.33",
+      "nanoid@^3": "^3.3.20",
+      "vite": "^7.3.8",
       "lodash-es": "^4.18.0",
       "yaml@^2": "^2.8.3",
       "bn.js@^5": "^5.2.3",
-      "@xmldom/xmldom@^0.9.0": "^0.9.10",
-      "mermaid": "^11.15.0"
+      "@xmldom/xmldom@^0.9.0": "^0.9.12",
+      "mermaid": "^11.17.2",
+      "js-yaml@^3": "^3.15.2",
+      "js-yaml@^4": "^4.3.2",
+      "ws@^7": "^7.5.14",
+      "ws@^8": "^8.23.0",
+      "sharp": "^0.35.5",
+      "source-map-js": "^1.2.4",
+      "katex": "^0.19.1",
+      "stream-json": "^3.9.0",
+      "zod@^4": "^4.6.7"
     }
   }
 }
